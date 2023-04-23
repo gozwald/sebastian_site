@@ -332,8 +332,7 @@
           <h1 class="text-center typo-bg-white pb-3">
             Aktuelle Veranstaltungen
           </h1>
-          <div id="coureseList" class="row">
-          </div>
+          <div id="coureseList" class="row"></div>
         </div>
       </section>
       <section class="bg-green pt-5 pb-5">
@@ -615,6 +614,7 @@
     crossorigin="anonymous"
   ></script>
   <script src="assets/js/script.js"></script>
+  <script src="env.js"></script>
   <script>
     $(document).ready(function () {
       $('[data-toggle="tooltip"]').tooltip();
@@ -626,11 +626,11 @@
 
     function fetchData() {
       const client = contentful.createClient({
-        space: "m6f6h3gbsi9t",
-        environment: "master", // defaults to 'master' if not set
-        accessToken: "n9XBNO-nzf-YUfy4bxqdxMSIfmeGkq34ao5RwAZr9jo",
+        space,
+        environment,
+        accessToken,
       });
-
+      
       client
         .getEntries()
         .then((response) => response.items)
@@ -651,15 +651,23 @@
 
             const kind = document.createElement("h3");
             kind.setAttribute("class", "pb-1 typo-bg-green");
-            kind.textContent = `${!!course.type ? course.type : "Art ist nicht angegeben"}`;
+            kind.textContent = `${
+              !!course.type ? course.type : "Art ist nicht angegeben"
+            }`;
 
             const date = document.createElement("h3");
             date.setAttribute("class", "font-weight-bold pb-1 typo-bg-green");
-            date.textContent = `${!!course.date ? course.date : "Termin ist nicht angegeben"}`
+            date.textContent = `${
+              !!course.date ? course.date : "Termin ist nicht angegeben"
+            }`;
 
             const description = document.createElement("p");
             description.setAttribute("class", "typo-bg-green pb-2");
-            description.textContent = `${!!course.shortDescriptionOfContent ? course.shortDescriptionOfContent : "Beschreibung ist nicht angegeben"}`;
+            description.textContent = `${
+              !!course.shortDescriptionOfContent
+                ? course.shortDescriptionOfContent
+                : "Beschreibung ist nicht angegeben"
+            }`;
 
             const bookingButtonBox = document.createElement("div");
             bookingButtonBox.setAttribute("class", "px-4 py-3");
