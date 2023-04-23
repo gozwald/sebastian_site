@@ -143,73 +143,50 @@
           </div>
         </nav>
       </header>
-      <section class="hero-bg">
-        <img
-          src="assets/images/page2-2-hero.jpg"
-          class="img-fluid d-sm-inline-block d-none"
-        />
-        <img
-          src="assets/images/page2-2-hero2.jpg"
-          alt=""
-          class="img-fluid d-inline-block d-sm-none"
-        />
-      </section>
       <section class="pt-5 pb-5">
-        <div class="container">
-          <h1 class="typo-bg-white text-center pb-4">
-            Gemeinschaftsentwicklung
-          </h1>
+        <div class="container cards pl-4">
+          <h1 id="title" class="typo-bg-white pb-4"></h1>
           <div class="row">
-            <div class="col-md-10 centered">
-              <p class="typo-bg-white pb-3">
-                <i
-                  >Ich begleite und berate Gemeinschaften in der Etablierung
-                  einer Kultur, die für alle funktioniert.</i
-                >
-              </p>
-              <p class="typo-bg-white pb-3">
-                Ich begleite bestehende und sich gründende Lebens- und
-                Arbeitsgemeinschaften, die eine erfüllende und effiziente Kultur
-                des gemeinschaftlichen Miteinanders und des gemeinschaftlichen
-                Führens kreieren wollen. Ich helfe bei der Implementierung von
-                Strukturen der kollektiven Selbststeuerung. Typische
-                Entwicklungsziele sind beispielsweise die Entwicklung einer
-                klaren Ausrichtung (Vision, Werte, Ziele), Aufbau effizienter
-                gemeinschaftlicher Entscheidungsstrukturen, nachhaltiger und
-                präventiver Umgang mit Reibungen und Konflikten, Integration
-                routinierter Räume und Strukturen für die Förderung der
-                zwischenmenschlichen Beziehungen oder die Entwicklung einer
-                gemeinsamen Ökonomie.
-              </p>
-              <p class="typo-bg-white pb-3">
-                In meiner Arbeit greife ich u.a. auf meine mehrjährigen
-                Erfahrungen mit intentionalen Lebensgemeinschaften und
-                Ökodörfern zurück und nutze die dort entwickelten innovativen
-                Methoden. Daraus entwickelte ich ein einheitliches Framework der
-                Gemeinschaftsentwicklung. Neben meiner praktischen Erfahrung als
-                Begleiter von Individuen und Gruppen sind folgende praktische
-                und theoretische Ansätze wichtige Einflussquellen: Gewaltfreie
-                Kommunikation, Soziokratie 3.0, Holakratie, Dragon Dreaming,
-                Forum, Radikale Therapie, Systemtheorie, Convergent
-                Facilitation, Transparente Kommunikation, Community Building
-                nach Scott Peck, Lean und Agile Management.
-              </p>
-              <p class="typo-bg-white pb-3">
-                Wenn Sie Interesse haben an oder Fragen bezüglich meiner
-                Unterstützung als Gemeinschafts- Entwickler, dann
-                <a
-                  href="kontakt.html"
-                  style="color: #214863; text-decoration: underline"
-                  >kontaktieren</a
-                >
-                Sie mich bitte.
-              </p>
+            <div class="col-md-10">
+              <h3 class="typo-bg-white m-0">
+                <i>Termin:</i>
+              </h3>
+              <p id="date" class="typo-bg-white pl-3"></p>
+              <!--  -->
+              <h3 class="typo-bg-white m-0">
+                <i>Ort und Art:</i>
+              </h3>
+              <p id="locationType" class="typo-bg-white pl-3"></p>
+              <!--  -->
+              <h3 class="typo-bg-white m-0">
+                <i>Kosten:</i>
+              </h3>
+              <p id="cost" class="typo-bg-white pl-3"></p>
+              <h3 class="typo-bg-white m-0">
+                <i>Intention/Ziele des Kurses:</i>
+              </h3>
+              <p id="purposegoalsOfTheCourse" class="typo-bg-white pl-3"></p>
+              <!--  -->
+              <h3 class="typo-bg-white m-0">
+                <i>Ablauf:</i>
+              </h3>
+              <p id="structure" class="typo-bg-white pl-3"></p>
+              <!--  -->
+              <h3 class="typo-bg-white m-0">
+                <i>Voraussetzungen:</i>
+              </h3>
+              <p id="requirements" class="typo-bg-white pl-3"></p>
+              <!--  -->
+              <h3 class="typo-bg-white m-0">
+                <i>Vertiefende Informationen:</i>
+              </h3>
+              <p id="additionalInformation" class="typo-bg-white pl-3"></p>
             </div>
           </div>
         </div>
       </section>
-      <footer>
-        <section class="bg-green pt-5 pb-5">
+      <footer class="box-shadow-green">
+        <section class="bg-green pt-5 pb-5b box-shadow-green">
           <div class="container">
             <h1 class="text-center typo-bg-white pb-3">
               Bleiben Sie auf dem Laufenden
@@ -272,7 +249,7 @@
             </div>
           </div>
         </section>
-        <div class="sub-footer p-4">
+        <div class="sub-footer p-4 shadow-lg">
           <div class="text-center text-white">
             <p class="notes">&copy; 2022 - Sebastianteubner.de</p>
             <p class="notes"><a href="datenschutz.html">DATENSCHUTZ</a></p>
@@ -350,5 +327,74 @@
     $(document).ready(function () {
       $('[data-toggle="tooltip"]').tooltip();
     });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
+  <script>
+    window.addEventListener("load", getData);
+
+    function getData() {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      const titleText = urlParams.get("title");
+      const title = document.querySelector("#title");
+      title.textContent = titleText;
+
+      const dateText = urlParams.get("date");
+      const date = document.querySelector("#date");
+      date.textContent = `${
+        dateText !== "undefined" ? dateText : "Termin ist nicht angegeben"
+      }`;
+
+      const locationText = urlParams.get("location");
+      const typeText = urlParams.get("type");
+      const locationType = document.querySelector("#locationType");
+      locationType.textContent = `${
+        locationText !== "undefined" ? locationText : "Ort ist nicht angegeben"
+      }, ${typeText !== "undefined" ? typeText : "Art ist nicht angegeben"}`;
+
+      const costText = urlParams.get("cost");
+      const cost = document.querySelector("#cost");
+      cost.textContent = `${
+        costText !== "undefined" ? costText : "Kosten ist nicht angegeben"
+      }`;
+
+      const purposegoalsOfTheCourseText = urlParams.get(
+        "purposegoalsOfTheCourse"
+      );
+      const purposegoalsOfTheCourse = document.querySelector(
+        "#purposegoalsOfTheCourse"
+      );
+      purposegoalsOfTheCourse.textContent = `${
+        purposegoalsOfTheCourseText !== "undefined"
+          ? purposegoalsOfTheCourseText
+          : "Intention/Ziele des Kurses sind nicht angegeben"
+      }`;
+
+      const structureText = urlParams.get("structure");
+      const structure = document.querySelector("#structure");
+      structure.textContent = `${
+        structureText !== "undefined"
+          ? structureText
+          : "Ablauf ist nicht angegeben"
+      }`;
+
+      const requirementsText = urlParams.get("requirements");
+      const requirements = document.querySelector("#requirements");
+      requirements.textContent = `${
+        requirementsText !== "undefined"
+          ? requirementsText
+          : "Voraussetzungen sind nicht angegeben"
+      }`;
+
+      const additionalInformationText = urlParams.get("additionalInformation");
+      const additionalInformation = document.querySelector(
+        "#additionalInformation"
+      );
+      additionalInformation.textContent = `${
+        additionalInformationText !== "undefined"
+          ? additionalInformationText
+          : "Vertiefende Informationen ist nicht angegeben"
+      }`;
+    }
   </script>
 </html>
