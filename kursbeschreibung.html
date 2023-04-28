@@ -144,8 +144,16 @@
         </nav>
       </header>
       <section class="pt-5 pb-5">
-        <div class="container cards pl-4">
-          <h1 id="title" class="typo-bg-white pb-4"></h1>
+        <div class="container detailed-card pl-4">
+          <div class="d-flex justify-content-between">
+            <h1 id="title" class="typo-bg-white pb-4"></h1>
+            <button
+              onclick="goBack()"
+              class="backToListButton btn-sm d-inline-block w-auto"
+            >
+              Zurück zur liste
+            </button>
+          </div>
           <div class="row">
             <div class="col-md-10">
               <h3 class="typo-bg-white m-0">
@@ -330,71 +338,12 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
   <script>
-    window.addEventListener("load", getData);
-
-    function getData() {
-      const urlParams = new URLSearchParams(window.location.search);
-
-      const titleText = urlParams.get("title");
-      const title = document.querySelector("#title");
-      title.textContent = titleText;
-
-      const dateText = urlParams.get("date");
-      const date = document.querySelector("#date");
-      date.textContent = `${
-        dateText !== "undefined" ? dateText : "Termin ist nicht angegeben"
-      }`;
-
-      const locationText = urlParams.get("location");
-      const typeText = urlParams.get("type");
-      const locationType = document.querySelector("#locationType");
-      locationType.textContent = `${
-        locationText !== "undefined" ? locationText : "Ort ist nicht angegeben"
-      }, ${typeText !== "undefined" ? typeText : "Art ist nicht angegeben"}`;
-
-      const costText = urlParams.get("cost");
-      const cost = document.querySelector("#cost");
-      cost.textContent = `${
-        costText !== "undefined" ? costText : "Kosten ist nicht angegeben"
-      }`;
-
-      const purposegoalsOfTheCourseText = urlParams.get(
-        "purposegoalsOfTheCourse"
-      );
-      const purposegoalsOfTheCourse = document.querySelector(
-        "#purposegoalsOfTheCourse"
-      );
-      purposegoalsOfTheCourse.textContent = `${
-        purposegoalsOfTheCourseText !== "undefined"
-          ? purposegoalsOfTheCourseText
-          : "Intention/Ziele des Kurses sind nicht angegeben"
-      }`;
-
-      const structureText = urlParams.get("structure");
-      const structure = document.querySelector("#structure");
-      structure.textContent = `${
-        structureText !== "undefined"
-          ? structureText
-          : "Ablauf ist nicht angegeben"
-      }`;
-
-      const requirementsText = urlParams.get("requirements");
-      const requirements = document.querySelector("#requirements");
-      requirements.textContent = `${
-        requirementsText !== "undefined"
-          ? requirementsText
-          : "Voraussetzungen sind nicht angegeben"
-      }`;
-
-      const additionalInformationText = urlParams.get("additionalInformation");
-      const additionalInformation = document.querySelector(
-        "#additionalInformation"
-      );
-      additionalInformation.textContent = `${
-        additionalInformationText !== "undefined"
-          ? additionalInformationText
-          : "Vertiefende Informationen ist nicht angegeben"
-      }`;
+    function goBack() {
+      window.history.back();
     }
+  </script>
+  <script src="./fetchData.js"></script>
+  <script>
+    window.addEventListener("load", fetchDescriptionData);
   </script>
 </html>

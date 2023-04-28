@@ -326,7 +326,6 @@
           </div>
         </div>
       </section>
-      <!--  -->
       <section class="pt-5 pb-5">
         <div class="container">
           <h1 class="text-center typo-bg-white pb-3">
@@ -398,7 +397,6 @@
           </div>
         </div>
       </section>
-      <!--  -->
       <section class="bg-green pt-5 pb-5">
         <div class="container">
           <h1 class="text-center typo-bg-green pb-3">Vision und Wirken</h1>
@@ -621,84 +619,8 @@
     });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
+  <script src="./fetchData.js"></script>
   <script>
-    window.addEventListener("load", fetchData);
-
-    function fetchData() {
-      const client = contentful.createClient({
-        space,
-        environment,
-        accessToken,
-      });
-      
-      client
-        .getEntries()
-        .then((response) => response.items)
-        .then((data) => {
-          const list = document.querySelector("#coureseList");
-          data = data.slice(0, 6);
-          data.forEach((course) => {
-            course = course.fields;
-            const container = document.createElement("div");
-            container.setAttribute("class", "col-lg-4 p-3");
-
-            const card = document.createElement("div");
-            card.setAttribute("class", "cards");
-
-            const title = document.createElement("h2");
-            title.setAttribute("class", "pb-1 typo-bg-green");
-            title.textContent = course.title;
-
-            const kind = document.createElement("h3");
-            kind.setAttribute("class", "pb-1 typo-bg-green");
-            kind.textContent = `${
-              !!course.type ? course.type : "Art ist nicht angegeben"
-            }`;
-
-            const date = document.createElement("h3");
-            date.setAttribute("class", "font-weight-bold pb-1 typo-bg-green");
-            date.textContent = `${
-              !!course.date ? course.date : "Termin ist nicht angegeben"
-            }`;
-
-            const description = document.createElement("p");
-            description.setAttribute("class", "typo-bg-green pb-2");
-            description.textContent = `${
-              !!course.shortDescriptionOfContent
-                ? course.shortDescriptionOfContent
-                : "Beschreibung ist nicht angegeben"
-            }`;
-
-            const bookingButtonBox = document.createElement("div");
-            bookingButtonBox.setAttribute("class", "px-4 py-3");
-            const bookingButton = document.createElement("button");
-            bookingButton.setAttribute("class", "btn p-2");
-            bookingButton.textContent = "Anmeldungslink";
-            bookingButtonBox.appendChild(bookingButton);
-
-            const infoButtonBox = document.createElement("div");
-            infoButtonBox.setAttribute("class", "px-4 py-3");
-            const infoButton = document.createElement("button");
-            infoButton.setAttribute("class", "button");
-            infoButton.textContent = "mehr Informationen";
-            infoButtonBox.appendChild(infoButton);
-            infoButton.setAttribute(
-              "onclick",
-              `window.location.href='kursbeschreibung.html?title=${course.title}&date=${course.date}&location=${course.location}&type=${course.type}&cost=${course.cost}&shortDescriptionOfContent=${course.shortDescriptionOfContent}&purposegoalsOfTheCourse=${course.purposegoalsOfTheCourse}&structure=${course?.structure?.content[0].content[0].value}&requirements=${course?.requirements?.content[0].content[0].value}&additionalInformation=${course?.additionalInformation?.content[0].content[0].value}'
-              `
-            );
-
-            card.appendChild(title);
-            card.appendChild(kind);
-            card.appendChild(date);
-            card.appendChild(description);
-            card.appendChild(bookingButtonBox);
-            card.appendChild(infoButtonBox);
-            container.appendChild(card);
-            list.appendChild(container);
-          });
-        })
-        .catch(console.error);
-    }
+    window.addEventListener("load", fetchHomeData);
   </script>
 </html>

@@ -308,47 +308,8 @@
     });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
+  <script  src="./fetchData.js"></script>
   <script>
-    window.addEventListener("load", fetchData);
-
-    function fetchData() {
-      const client = contentful.createClient({
-        space,
-        environment, 
-        accessToken,
-      });
-
-      client
-        .getEntries()
-        .then((response) => response.items)
-        .then((data) => {
-          const list = document.querySelector("#coureseList");
-
-          data.forEach((course) => {
-            course = course.fields;
-            const container = document.createElement("div");
-            container.setAttribute("class", "p-3");
-
-            const card = document.createElement("div");
-            card.setAttribute("class", "cards");
-
-            const title = document.createElement("h4");
-            title.setAttribute("class", "typo-bg-green");
-            title.textContent = course.title;
-
-            const description = document.createElement("h3");
-            description.setAttribute("class", "pl-3 typo-bg-green");
-            description.textContent = `${
-              !!course.date ? course.date : "termin ist nicht angegeben"
-            }, ${!!course.type ? course.type : "art ist nicht angegeben"}.`;
-
-            card.appendChild(title);
-            card.appendChild(description);
-            container.appendChild(card);
-            list.appendChild(container);
-          });
-        })
-        .catch(console.error);
-    }
+    window.addEventListener("load", fetchCurrentData);
   </script>
 </html>
