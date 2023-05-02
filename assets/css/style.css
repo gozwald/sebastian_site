@@ -302,38 +302,42 @@ footer {
   height: 66vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between
+  justify-content: space-between;
 }
 
 .card-line {
-  max-height: 13%;
   position: relative;
 }
+
 .card-button {
   height: 16%;
 }
+
 .card-description {
-  height: 35%;
-  text-align: center;
+  height: min-content;
   position: relative;
+  display: contents;
 }
+
 .card-item-overflow {
   overflow: hidden;
 }
 
 .overflow-more-info {
   position: absolute;
-  /* bottom: -10px; */
-  right: 0;
-  background-color: #98caaa;
+  bottom: 162px;
+  right: 30px;
+  background-color: rgba(152, 202, 170, 0.9);
+  border-radius: 15px 0 0 0;
   color: #214863;
   font-style: italic;
   font-size: 15px;
   font-weight: 400 !important;
   cursor: pointer;
 }
+
 .popup {
-  background-color: #98caaa;
+  background-color: rgba(152, 202, 170, 0.9);
   text-align: center;
   border: 1px solid #214863;
   box-shadow: 0px 6px 22px rgba(0, 0, 0, 0.3);

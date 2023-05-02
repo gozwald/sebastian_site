@@ -18,17 +18,11 @@ function addPopupIfNeeded(component) {
     popup.setAttribute("aria-labelledby", "navbarDropdownMenuLink");
     popup.textContent = component.textContent.replace(/... zeig mehr$/, "");
 
-    switch (component.id) {
-      case "title":
-        showMore.style = "bottom: -4px";
-        break;
-      case "description":
-        showMore.style = "bottom: -10px";
-        break;
-      default:
-        showMore.style = "bottom: 2px";
-    }
-
+    const style = window.getComputedStyle(component);
+    const lineHeight = style.getPropertyValue("line-height").split('px')[0];
+    const lines = Math.floor(component.clientHeight / lineHeight);
+    const finalHeight = lineHeight * lines;
+    component.style.height = `${finalHeight}px`;
     component.appendChild(popup);
   }
 }
@@ -55,19 +49,19 @@ function fetchHomeData() {
         card.setAttribute("class", "cards");
 
         const titleBox = document.createElement("div");
-        titleBox.setAttribute("class", "card-line mb-3");
+        titleBox.setAttribute("class", "card-line text-center");
         const title = document.createElement("h2");
-        title.setAttribute("class", "h-100 card-item-overflow");
+        title.setAttribute("class", "h-100");
         title.setAttribute("id", "title");
         title.textContent = course.title;
         titleBox.appendChild(title);
 
         const kindAndDateBox = document.createElement("div");
-        kindAndDateBox.setAttribute("class", "card-line mb-3");
+        kindAndDateBox.setAttribute("class", "card-line");
         const kindAndDate = document.createElement("h3");
         kindAndDate.setAttribute(
           "class",
-          "typo-bg-green h-100 card-item-overflow"
+          "typo-bg-green h-100"
         );
         kindAndDate.setAttribute("id", "kindAndDate");
         const kind = `${
@@ -80,13 +74,13 @@ function fetchHomeData() {
         kindAndDateBox.appendChild(kindAndDate);
 
         const descriptionBox = document.createElement("div");
-        descriptionBox.setAttribute("class", "card-description mb-3");
+        descriptionBox.setAttribute("class", "card-description");
         const description = document.createElement("h3");
         description.setAttribute("id", "description");
 
         description.setAttribute(
           "class",
-          "typo-bg-green card-item-overflow h-100"
+          "typo-bg-green card-item-overflow "
         );
         description.textContent = `${
           !!course.shortDescriptionOfContent
@@ -96,8 +90,10 @@ function fetchHomeData() {
         description.textContent = course.shortDescriptionOfContent;
         descriptionBox.appendChild(description);
 
+        const buttonsConainer = document.createElement("div")
+
         const bookingButtonBox = document.createElement("div");
-        bookingButtonBox.setAttribute("class", "px-4 py-3");
+        bookingButtonBox.setAttribute("class", "px-4");
         const bookingButton = document.createElement("button");
         bookingButton.setAttribute("class", "btn p-2");
         bookingButton.textContent = "Anmeldungslink";
@@ -114,17 +110,16 @@ function fetchHomeData() {
           `window.location.href='kursbeschreibung.html?title=${course.title}&date=${course.date}&location=${course.location}&type=${course.type}&cost=${course.cost}&shortDescriptionOfContent=${course.shortDescriptionOfContent}&purposegoalsOfTheCourse=${course.purposegoalsOfTheCourse}&structure=${course?.structure?.content[0].content[0].value}&requirements=${course?.requirements?.content[0].content[0].value}&additionalInformation=${course?.additionalInformation?.content[0].content[0].value}'
                 `
         );
+        buttonsConainer.appendChild(bookingButtonBox);
+        buttonsConainer.appendChild(infoButtonBox);
 
         card.appendChild(titleBox);
         card.appendChild(kindAndDateBox);
         card.appendChild(descriptionBox);
-        card.appendChild(bookingButtonBox);
-        card.appendChild(infoButtonBox);
+        card.appendChild(buttonsConainer);
         container.appendChild(card);
         list.appendChild(container);
 
-        addPopupIfNeeded(title);
-        addPopupIfNeeded(kindAndDate);
         addPopupIfNeeded(description);
       });
     })
