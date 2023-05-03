@@ -19,7 +19,7 @@ function addPopupIfNeeded(component) {
     popup.textContent = component.textContent.replace(/... zeig mehr$/, "");
 
     const style = window.getComputedStyle(component);
-    const lineHeight = style.getPropertyValue("line-height").split('px')[0];
+    const lineHeight = style.getPropertyValue("line-height").split("px")[0];
     const lines = Math.floor(component.clientHeight / lineHeight);
     const finalHeight = lineHeight * lines;
     component.style.height = `${finalHeight}px`;
@@ -42,6 +42,7 @@ function fetchHomeData() {
       data = data.slice(0, 6);
       data.forEach((course) => {
         course = course.fields;
+        console.log(course);
         const container = document.createElement("div");
         container.setAttribute("class", "col-lg-4 p-3");
 
@@ -59,10 +60,7 @@ function fetchHomeData() {
         const kindAndDateBox = document.createElement("div");
         kindAndDateBox.setAttribute("class", "card-line");
         const kindAndDate = document.createElement("h3");
-        kindAndDate.setAttribute(
-          "class",
-          "typo-bg-green h-100"
-        );
+        kindAndDate.setAttribute("class", "typo-bg-green h-100");
         kindAndDate.setAttribute("id", "kindAndDate");
         const kind = `${
           !!course.type ? course.type : "Art ist nicht angegeben"
@@ -78,10 +76,7 @@ function fetchHomeData() {
         const description = document.createElement("h3");
         description.setAttribute("id", "description");
 
-        description.setAttribute(
-          "class",
-          "typo-bg-green card-item-overflow "
-        );
+        description.setAttribute("class", "typo-bg-green card-item-overflow ");
         description.textContent = `${
           !!course.shortDescriptionOfContent
             ? course.shortDescriptionOfContent
@@ -90,7 +85,7 @@ function fetchHomeData() {
         description.textContent = course.shortDescriptionOfContent;
         descriptionBox.appendChild(description);
 
-        const buttonsConainer = document.createElement("div")
+        const buttonsConainer = document.createElement("div");
 
         const bookingButtonBox = document.createElement("div");
         bookingButtonBox.setAttribute("class", "px-4");
@@ -98,7 +93,10 @@ function fetchHomeData() {
         bookingButton.setAttribute("class", "btn p-2");
         bookingButton.textContent = "Anmeldungslink";
         bookingButtonBox.appendChild(bookingButton);
-
+        bookingButton.setAttribute(
+          "onclick",
+          `window.open('${course.registration_link}', '_blank')`
+        );
         const infoButtonBox = document.createElement("div");
         infoButtonBox.setAttribute("class", "px-4 py-3");
         const infoButton = document.createElement("button");
@@ -107,7 +105,7 @@ function fetchHomeData() {
         infoButtonBox.appendChild(infoButton);
         infoButton.setAttribute(
           "onclick",
-          `window.location.href='kursbeschreibung.html?title=${course.title}&date=${course.date}&location=${course.location}&type=${course.type}&cost=${course.cost}&shortDescriptionOfContent=${course.shortDescriptionOfContent}&purposegoalsOfTheCourse=${course.purposegoalsOfTheCourse}&structure=${course?.structure?.content[0].content[0].value}&requirements=${course?.requirements?.content[0].content[0].value}&additionalInformation=${course?.additionalInformation?.content[0].content[0].value}'
+          `window.location.href='kursbeschreibung.html?title=${course.title}&date=${course.date}&location=${course.location}&type=${course.type}&registration=${course.registration}&registration_link=${course.registration_link}&cost=${course.cost}&shortDescriptionOfContent=${course.shortDescriptionOfContent}&purposegoalsOfTheCourse=${course.purposegoalsOfTheCourse}&structure=${course?.structure?.content[0].content[0].value}&requirements=${course?.requirements?.content[0].content[0].value}&additionalInformation=${course?.additionalInformation?.content[0].content[0].value}'
                 `
         );
         buttonsConainer.appendChild(bookingButtonBox);
@@ -155,8 +153,7 @@ function fetchCurrentData() {
         moreInfo.setAttribute("class", "moreInfoButton");
         moreInfo.setAttribute(
           "onclick",
-          `window.location.href='kursbeschreibung.html?title=${course.title}&date=${course.date}&location=${course.location}&type=${course.type}&cost=${course.cost}&shortDescriptionOfContent=${course.shortDescriptionOfContent}&purposegoalsOfTheCourse=${course.purposegoalsOfTheCourse}&structure=${course?.structure?.content[0].content[0].value}&requirements=${course?.requirements?.content[0].content[0].value}&additionalInformation=${course?.additionalInformation?.content[0].content[0].value}'
-              `
+          `window.location.href='kursbeschreibung.html?title=${course.title}&date=${course.date}&location=${course.location}&type=${course.type}&registration=${course.registration}&registration_link=${course.registration_link}&cost=${course.cost}&shortDescriptionOfContent=${course.shortDescriptionOfContent}&purposegoalsOfTheCourse=${course.purposegoalsOfTheCourse}&structure=${course?.structure?.content[0].content[0].value}&requirements=${course?.requirements?.content[0].content[0].value}&additionalInformation=${course?.additionalInformation?.content[0].content[0].value}'`
         );
         moreInfo.textContent = "mehr informationen";
 
@@ -202,6 +199,26 @@ function fetchDescriptionData() {
   cost.textContent = `${
     costText !== "undefined" ? costText : "Kosten ist nicht angegeben"
   }`;
+
+  const registrationText = urlParams.get("registration");
+  const registration = document.querySelector("#registration");
+  registration.textContent = `${
+    registrationText !== "undefined"
+      ? registrationText
+      : "Anmeldung ist nicht angegeben"
+  }`;
+
+  const registrationLinkText = urlParams.get("registration_link");
+  const registrationLink = document.querySelector("#registration_link");
+  registrationLink.textContent = `${
+    registrationLinkText !== "undefined"
+      ? registrationLinkText
+      : "Anmeldung Link ist nicht angegeben"
+  }`;
+  registrationLink.setAttribute(
+    "onclick",
+    `window.open('${registrationLinkText}', '_blank')`
+  );
 
   const purposegoalsOfTheCourseText = urlParams.get("purposegoalsOfTheCourse");
   const purposegoalsOfTheCourse = document.querySelector(

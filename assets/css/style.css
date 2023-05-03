@@ -67,6 +67,10 @@ h3 {
   color: #fffff9;
 }
 
+#registration_link {
+  cursor: pointer;
+}
+
 .quote {
   font-family: "PT_Serif_ita" serif;
   font-size: 20.3px;
