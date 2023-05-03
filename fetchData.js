@@ -1,3 +1,7 @@
+const space = "m6f6h3gbsi9t";
+const environment = "master"; // defaults to 'master' if not set
+const accessToken = "n9XBNO-nzf-YUfy4bxqdxMSIfmeGkq34ao5RwAZr9jo";
+
 function addPopupIfNeeded(component) {
   if (component.scrollHeight > component.clientHeight + 10) {
     const popUpTogler = document.createElement("a");
@@ -130,6 +134,10 @@ function fetchCurrentData() {
     environment,
     accessToken,
   });
+
+  const space = "m6f6h3gbsi9t";
+  const environment = "master"; // defaults to 'master' if not set
+  const accessToken = "n9XBNO-nzf-YUfy4bxqdxMSIfmeGkq34ao5RwAZr9jo";
 
   client
     .getEntries({ order: "-sys.createdAt" })
