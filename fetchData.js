@@ -135,10 +135,6 @@ function fetchCurrentData() {
     accessToken,
   });
 
-  const space = "m6f6h3gbsi9t";
-  const environment = "master"; // defaults to 'master' if not set
-  const accessToken = "n9XBNO-nzf-YUfy4bxqdxMSIfmeGkq34ao5RwAZr9jo";
-
   client
     .getEntries({ order: "-sys.createdAt" })
     .then((response) => response.items)
