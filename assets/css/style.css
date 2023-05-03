@@ -283,14 +283,97 @@ footer {
   color: #214863;
 }
 
-.cards {
+.detailed-card {
   background-color: #98caaa;
   padding: 12px;
   border-radius: 3px;
 }
 
+.current-cards {
+  background-color: #98caaa;
+  padding: 12px;
+  border-radius: 3px;
+}
+
+.cards {
+  background-color: #98caaa;
+  padding: 12px;
+  border-radius: 3px;
+  height: 66vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-line {
+  position: relative;
+}
+
+.card-button {
+  height: 16%;
+}
+
+.card-description {
+  height: min-content;
+  position: relative;
+  display: contents;
+}
+
+.card-item-overflow {
+  overflow: hidden;
+}
+
+.overflow-more-info {
+  position: absolute;
+  bottom: 162px;
+  right: 30px;
+  background-color: rgba(152, 202, 170, 0.9);
+  border-radius: 15px 0 0 0;
+  color: #214863;
+  font-style: italic;
+  font-size: 15px;
+  font-weight: 400 !important;
+  cursor: pointer;
+}
+
+.popup {
+  background-color: rgba(152, 202, 170, 0.9);
+  text-align: center;
+  border: 1px solid #214863;
+  box-shadow: 0px 6px 22px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  width: 80%;
+  top: -41px !important;
+  left: -110px !important;
+}
+
 .typo-bg-green {
   color: #10293f;
+}
+
+.moreInfoButton {
+  font-size: 17px;
+  font-style: italic;
+  cursor: pointer;
+  color: #214863;
+}
+
+.moreInfoButton:hover {
+  color: #2b658f;
+  text-decoration: underline;
+}
+
+.backToListButton {
+  height: fit-content;
+  background-color: #2b658f;
+  border-color: #3787c0;
+  color: #98caaa;
+  cursor: pointer;
+}
+
+.backToListButton:hover {
+  background-color: #40769d;
+  border-color: #56a0d4;
 }
 
 div.centered {
