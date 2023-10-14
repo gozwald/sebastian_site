@@ -61,19 +61,44 @@ function fetchHomeData() {
         title.textContent = course.title;
         titleBox.appendChild(title);
 
-        const kindAndDateBox = document.createElement("div");
-        kindAndDateBox.setAttribute("class", "card-line");
-        const kindAndDate = document.createElement("h3");
-        kindAndDate.setAttribute("class", "typo-bg-green h-100");
-        kindAndDate.setAttribute("id", "kindAndDate");
+        const kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox =
+          document.createElement("div");
+        kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox.setAttribute(
+          "class",
+          "card-line"
+        );
+        const kindAndDateAndNumberOfDaysAndPresenceOrOnline =
+          document.createElement("h3");
+        kindAndDateAndNumberOfDaysAndPresenceOrOnline.setAttribute(
+          "class",
+          "typo-bg-green h-100"
+        );
+        kindAndDateAndNumberOfDaysAndPresenceOrOnline.setAttribute(
+          "id",
+          "kindAndDateAndNumberOfDaysAndPresenceOrOnline"
+        );
+
         const kind = `${
           !!course.type ? course.type : "Art ist nicht angegeben"
         }`;
         const date = `${
           !!course.date ? course.date : "Termin ist nicht angegeben"
         }`;
-        kindAndDate.textContent = `${kind}, ${date}`;
-        kindAndDateBox.appendChild(kindAndDate);
+        const numberOfDays = `${
+          !!course.numberOfDays ? course.numberOfDays : ""
+        }`;
+
+        const onlineOrPresence = `${
+          !!course.onlineOrPresence ? course.onlineOrPresence : ""
+        }`;
+
+        kindAndDateAndNumberOfDaysAndPresenceOrOnline.textContent = `${kind}, ${date}, ${onlineOrPresence} ${
+          numberOfDays ? `, ${numberOfDays} Tage` : ""
+        }`;
+
+        kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox.appendChild(
+          kindAndDateAndNumberOfDaysAndPresenceOrOnline
+        );
 
         const descriptionBox = document.createElement("div");
         descriptionBox.setAttribute("class", "card-description");
@@ -109,14 +134,41 @@ function fetchHomeData() {
         infoButtonBox.appendChild(infoButton);
         infoButton.setAttribute(
           "onclick",
-          `window.location.href='kursbeschreibung.html?title=${course.title}&date=${course.date}&location=${course.location}&type=${course.type}&registration=${course.registration}&registration_link=${course.registration_link}&cost=${course.cost}&shortDescriptionOfContent=${course.shortDescriptionOfContent}&purposegoalsOfTheCourse=${course.purposegoalsOfTheCourse}&structure=${course?.structure?.content[0].content[0].value}&requirements=${course?.requirements?.content[0].content[0].value}&additionalInformation=${course?.additionalInformation?.content[0].content[0].value}'
-                `
+          `window.location.href='kursbeschreibung.html?title=${encodeURIComponent(
+            course.title
+          )}&date=${encodeURIComponent(
+            course.date
+          )}&location=${encodeURIComponent(
+            course.location
+          )}&type=${encodeURIComponent(
+            course.type
+          )}&onlineorpresence=${encodeURIComponent(
+            course.onlineOrPresence
+          )}&numberofdays=${encodeURIComponent(
+            course.numberOfDays || ""
+          )}&registration=${encodeURIComponent(
+            course.registration
+          )}&registration_link=${encodeURIComponent(
+            course.registration_link
+          )}&cost=${encodeURIComponent(
+            course.cost
+          )}&shortDescriptionOfContent=${encodeURIComponent(
+            course.shortDescriptionOfContent
+          )}&purposegoalsOfTheCourse=${encodeURIComponent(
+            course.purposegoalsOfTheCourse
+          )}&structure=${encodeURIComponent(
+            course?.structure?.content[0].content[0].value
+          )}&requirements=${encodeURIComponent(
+            course?.requirements?.content[0].content[0].value
+          )}&additionalInformation=${encodeURIComponent(
+            course?.additionalInformation?.content[0].content[0].value
+          )}'`
         );
         buttonsConainer.appendChild(bookingButtonBox);
         buttonsConainer.appendChild(infoButtonBox);
 
         card.appendChild(titleBox);
-        card.appendChild(kindAndDateBox);
+        card.appendChild(kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox);
         card.appendChild(descriptionBox);
         card.appendChild(buttonsConainer);
         container.appendChild(card);
@@ -157,15 +209,58 @@ function fetchCurrentData() {
         moreInfo.setAttribute("class", "moreInfoButton");
         moreInfo.setAttribute(
           "onclick",
-          `window.location.href='kursbeschreibung.html?title=${course.title}&date=${course.date}&location=${course.location}&type=${course.type}&registration=${course.registration}&registration_link=${course.registration_link}&cost=${course.cost}&shortDescriptionOfContent=${course.shortDescriptionOfContent}&purposegoalsOfTheCourse=${course.purposegoalsOfTheCourse}&structure=${course?.structure?.content[0].content[0].value}&requirements=${course?.requirements?.content[0].content[0].value}&additionalInformation=${course?.additionalInformation?.content[0].content[0].value}'`
+          `window.location.href='kursbeschreibung.html?title=${encodeURIComponent(
+            course.title
+          )}&date=${encodeURIComponent(
+            course.date
+          )}&location=${encodeURIComponent(
+            course.location
+          )}&type=${encodeURIComponent(
+            course.type
+          )}&onlineorpresence=${encodeURIComponent(
+            course.onlineOrPresence
+          )}&numberofdays=${encodeURIComponent(
+            course.numberOfDays || ""
+          )}&registration=${encodeURIComponent(
+            course.registration
+          )}&registration_link=${encodeURIComponent(
+            course.registration_link
+          )}&cost=${encodeURIComponent(
+            course.cost
+          )}&shortDescriptionOfContent=${encodeURIComponent(
+            course.shortDescriptionOfContent
+          )}&purposegoalsOfTheCourse=${encodeURIComponent(
+            course.purposegoalsOfTheCourse
+          )}&structure=${encodeURIComponent(
+            course?.structure?.content[0].content[0].value
+          )}&requirements=${encodeURIComponent(
+            course?.requirements?.content[0].content[0].value
+          )}&additionalInformation=${encodeURIComponent(
+            course?.additionalInformation?.content[0].content[0].value
+          )}'`
         );
         moreInfo.textContent = "mehr informationen";
 
+        const kind = `${
+          !!course.type ? course.type : "Art ist nicht angegeben"
+        }`;
+        const date = `${
+          !!course.date ? course.date : "Termin ist nicht angegeben"
+        }`;
+        const numberOfDays = `${
+          !!course.numberOfDays ? course.numberOfDays : ""
+        }`;
+
+        const onlineOrPresence = `${
+          !!course.onlineOrPresence ? course.onlineOrPresence : ""
+        }`;
+
         const description = document.createElement("h3");
         description.setAttribute("class", "pl-3 typo-bg-green");
-        description.textContent = `${
-          !!course.date ? course.date : "termin ist nicht angegeben"
-        }, ${!!course.type ? course.type : "art ist nicht angegeben"}, ... `;
+
+        description.textContent = `${kind}, ${date}, ${onlineOrPresence} ${
+          numberOfDays ? `, ${numberOfDays} Tage` : ""
+        } ...`;
 
         description.appendChild(moreInfo);
 
@@ -183,32 +278,64 @@ function fetchDescriptionData() {
 
   const titleText = urlParams.get("title");
   const title = document.querySelector("#title");
-  title.textContent = titleText;
+  title.textContent = decodeURIComponent(titleText);
 
   const dateText = urlParams.get("date");
   const date = document.querySelector("#date");
   date.textContent = `${
-    dateText !== "undefined" ? dateText : "Termin ist nicht angegeben"
+    dateText !== "undefined"
+      ? decodeURIComponent(dateText)
+      : "Termin ist nicht angegeben"
   }`;
 
   const locationText = urlParams.get("location");
+  // const onlineorpresence = urlParams.get("onlineorpresence");
+  // ${onlineorpresence !== "undefined" ? onlineorpresence : ""}
+
+  const location = document.querySelector("#location");
+  location.textContent = `${
+    locationText !== "undefined"
+      ? decodeURIComponent(locationText)
+      : "Ort ist nicht angegeben"
+  }`;
+
   const typeText = urlParams.get("type");
-  const locationType = document.querySelector("#locationType");
-  locationType.textContent = `${
-    locationText !== "undefined" ? locationText : "Ort ist nicht angegeben"
-  }, ${typeText !== "undefined" ? typeText : "Art ist nicht angegeben"}`;
+  const type = document.querySelector("#type");
+  type.textContent = `${
+    typeText !== "undefined"
+      ? decodeURIComponent(typeText)
+      : "Ort ist nicht angegeben"
+  }`;
+
+  // Get the "numberOfDaysText" value
+  const numberOfDaysText = urlParams.get("numberofdays");
+
+  // Get the "Tage" section and the "numberofdays" element
+  const daysSection = document.getElementById("daysSection");
+  const numberOfDays = document.getElementById("numberofdays");
+
+  if (numberOfDaysText && numberOfDaysText !== "undefined") {
+    // If "numberOfDaysText" is defined and not "undefined", set its content and show the "Tage" section
+    numberOfDays.textContent = decodeURIComponent(numberOfDaysText);
+    daysSection.style.display = "block";
+  } else {
+    // If "numberOfDaysText" is not defined or is "undefined", hide the "Tage" section
+    daysSection.style.display = "none";
+  }
 
   const costText = urlParams.get("cost");
   const cost = document.querySelector("#cost");
   cost.textContent = `${
-    costText !== "undefined" ? costText : "Kosten ist nicht angegeben"
+    costText !== "undefined"
+      ? decodeURIComponent(costText)
+      : "Kosten ist nicht angegeben"
   }`;
 
   const registrationText = urlParams.get("registration");
   const registration = document.querySelector("#registration");
   registration.textContent = `${
     registrationText !== "undefined"
-      ? registrationText
+      ? decodeURIComponent(registrationText)
       : "Anmeldung ist nicht angegeben"
   }`;
 
@@ -216,7 +343,7 @@ function fetchDescriptionData() {
   const registrationLink = document.querySelector("#registration_link");
   registrationLink.textContent = `${
     registrationLinkText !== "undefined"
-      ? registrationLinkText
+      ? decodeURIComponent(registrationLinkText)
       : "Anmeldung Link ist nicht angegeben"
   }`;
   registrationLink.setAttribute(
@@ -230,21 +357,23 @@ function fetchDescriptionData() {
   );
   purposegoalsOfTheCourse.textContent = `${
     purposegoalsOfTheCourseText !== "undefined"
-      ? purposegoalsOfTheCourseText
+      ? decodeURIComponent(purposegoalsOfTheCourseText)
       : "Intention/Ziele des Kurses sind nicht angegeben"
   }`;
 
   const structureText = urlParams.get("structure");
   const structure = document.querySelector("#structure");
   structure.textContent = `${
-    structureText !== "undefined" ? structureText : "Ablauf ist nicht angegeben"
+    structureText !== "undefined"
+      ? decodeURIComponent(structureText)
+      : "Ablauf ist nicht angegeben"
   }`;
 
   const requirementsText = urlParams.get("requirements");
   const requirements = document.querySelector("#requirements");
   requirements.textContent = `${
     requirementsText !== "undefined"
-      ? requirementsText
+      ? decodeURIComponent(requirementsText)
       : "Voraussetzungen sind nicht angegeben"
   }`;
 
@@ -254,7 +383,7 @@ function fetchDescriptionData() {
   );
   additionalInformation.textContent = `${
     additionalInformationText !== "undefined"
-      ? additionalInformationText
+      ? decodeURIComponent(additionalInformationText)
       : "Vertiefende Informationen ist nicht angegeben"
   }`;
 }
