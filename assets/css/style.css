@@ -245,6 +245,15 @@ header .row100 {
   width: 100%;
 }
 
+#title a {
+  color: #10293f;
+  text-decoration: none; /* Remove underline */
+}
+
+#title a:hover {
+  color: #fff; /* Change color to white on hover */
+}
+
 header ul .nav-item {
   padding: 10px;
   cursor: pointer;
@@ -321,6 +330,12 @@ footer {
   height: min-content;
   position: relative;
   display: contents;
+}
+
+#description {
+  font-size: medium;
+  line-height: normal;
+  padding-bottom: 10px;
 }
 
 .card-item-overflow {
@@ -647,6 +662,7 @@ section.p-t {
     margin-bottom: 6px;
   }
 }
+
 
 .ball {
   display: flex;

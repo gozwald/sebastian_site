@@ -2,35 +2,6 @@ const space = "m6f6h3gbsi9t";
 const environment = "master"; // defaults to 'master' if not set
 const accessToken = "n9XBNO-nzf-YUfy4bxqdxMSIfmeGkq34ao5RwAZr9jo";
 
-function addPopupIfNeeded(component) {
-  if (component.scrollHeight > component.clientHeight + 10) {
-    const popUpTogler = document.createElement("a");
-    popUpTogler.setAttribute("data-toggle", "dropdown");
-    popUpTogler.setAttribute("id", "navbarDropdownMenuLink");
-    popUpTogler.setAttribute("aria-haspopup", "true");
-    popUpTogler.setAttribute("aria-expanded", "false");
-
-    const showMore = document.createElement("span");
-    showMore.className = "overflow-more-info";
-
-    showMore.textContent = "... zeig mehr";
-    popUpTogler.appendChild(showMore);
-    component.appendChild(popUpTogler);
-
-    const popup = document.createElement("div");
-    popup.setAttribute("class", "dropdown-menu popup");
-    popup.setAttribute("aria-labelledby", "navbarDropdownMenuLink");
-    popup.textContent = component.textContent.replace(/... zeig mehr$/, "");
-
-    const style = window.getComputedStyle(component);
-    const lineHeight = style.getPropertyValue("line-height").split("px")[0];
-    const lines = Math.floor(component.clientHeight / lineHeight);
-    const finalHeight = lineHeight * lines;
-    component.style.height = `${finalHeight}px`;
-    component.appendChild(popup);
-  }
-}
-
 function fetchHomeData() {
   const client = contentful.createClient({
     space,
@@ -48,19 +19,53 @@ function fetchHomeData() {
         course = course.fields;
         console.log(course);
         const container = document.createElement("div");
-        container.setAttribute("class", "col-lg-4 p-3");
+        container.setAttribute("class", "col-xl-4 p-3");
 
         const card = document.createElement("div");
         card.setAttribute("class", "cards");
 
+        // Create an anchor tag for the title
         const titleBox = document.createElement("div");
         titleBox.setAttribute("class", "card-line text-center");
-        const title = document.createElement("h2");
-        title.setAttribute("class", "h-100");
-        title.setAttribute("id", "title");
-        title.textContent = course.title;
-        titleBox.appendChild(title);
+        titleBox.setAttribute("id", "title");
+        const titleLink = document.createElement("a");
+        titleLink.setAttribute(
+          "href",
+          `kursbeschreibung.html?title=${encodeURIComponent(
+            course.title
+          )}&date=${encodeURIComponent(
+            course.date
+          )}&location=${encodeURIComponent(
+            course.location
+          )}&type=${encodeURIComponent(
+            course.type
+          )}&onlineorpresence=${encodeURIComponent(
+            course.onlineOrPresence
+          )}&registration=${encodeURIComponent(
+            course.registration
+          )}&registration_link=${encodeURIComponent(
+            course.registration_link
+          )}&cost=${encodeURIComponent(
+            course.cost
+          )}&shortDescriptionOfContent=${encodeURIComponent(
+            course.shortDescriptionOfContent
+          )}&purposegoalsOfTheCourse=${encodeURIComponent(
+            course.purposegoalsOfTheCourse
+          )}&structure=${encodeURIComponent(
+            course?.structure?.content[0].content[0].value
+          )}&requirements=${encodeURIComponent(
+            course?.requirements?.content[0].content[0].value
+          )}&additionalInformation=${encodeURIComponent(
+            course?.additionalInformation?.content[0].content[0].value
+          )}`
+        );
+        titleLink.setAttribute("class", "h-100");
 
+        const title = document.createElement("h2");
+        title.textContent = course.title;
+
+        titleLink.appendChild(title);
+        titleBox.appendChild(titleLink);
         const kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox =
           document.createElement("div");
         kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox.setAttribute(
@@ -97,10 +102,10 @@ function fetchHomeData() {
 
         const descriptionBox = document.createElement("div");
         descriptionBox.setAttribute("class", "card-description");
-        const description = document.createElement("h3");
+        const description = document.createElement("div");
         description.setAttribute("id", "description");
 
-        description.setAttribute("class", "typo-bg-green card-item-overflow ");
+        description.setAttribute("class", "typo-bg-green card-item-overflow");
         description.textContent = `${
           !!course.shortDescriptionOfContent
             ? course.shortDescriptionOfContent
@@ -167,7 +172,7 @@ function fetchHomeData() {
         container.appendChild(card);
         list.appendChild(container);
 
-        addPopupIfNeeded(description);
+        // addPopupIfNeeded(description);
       });
     })
     .catch(console.error);
@@ -188,6 +193,35 @@ function fetchCurrentData() {
 
       data.forEach((course) => {
         course = course.fields;
+
+        const link = `kursbeschreibung.html?title=${encodeURIComponent(
+          course.title
+        )}&date=${encodeURIComponent(
+          course.date
+        )}&location=${encodeURIComponent(
+          course.location
+        )}&type=${encodeURIComponent(
+          course.type
+        )}&onlineorpresence=${encodeURIComponent(
+          course.onlineOrPresence
+        )}&registration=${encodeURIComponent(
+          course.registration
+        )}&registration_link=${encodeURIComponent(
+          course.registration_link
+        )}&cost=${encodeURIComponent(
+          course.cost
+        )}&shortDescriptionOfContent=${encodeURIComponent(
+          course.shortDescriptionOfContent
+        )}&purposegoalsOfTheCourse=${encodeURIComponent(
+          course.purposegoalsOfTheCourse
+        )}&structure=${encodeURIComponent(
+          course?.structure?.content[0].content[0].value
+        )}&requirements=${encodeURIComponent(
+          course?.requirements?.content[0].content[0].value
+        )}&additionalInformation=${encodeURIComponent(
+          course?.additionalInformation?.content[0].content[0].value
+        )}`;
+
         const container = document.createElement("div");
         container.setAttribute("class", "p-3");
 
@@ -196,39 +230,31 @@ function fetchCurrentData() {
 
         const title = document.createElement("h4");
         title.setAttribute("class", "typo-bg-green");
-        title.textContent = course.title;
+        title.setAttribute("id", "title");
+
+        // Create an anchor element
+        const anchor = document.createElement("a");
+        // Set the href attribute to the link
+        anchor.setAttribute("href", link);
+        // Set the onclick event for redirection through JavaScript
+        anchor.setAttribute(
+          "onclick",
+          `window.location.href='${link}'; return false;`
+        );
+
+        // Append the title to the anchor
+        anchor.appendChild(document.createTextNode(course.title));
+
+        // Append the anchor to the title
+        title.appendChild(anchor);
 
         const moreInfo = document.createElement("span");
         moreInfo.setAttribute("class", "moreInfoButton");
+
+        // Set the onclick event for redirection through JavaScript
         moreInfo.setAttribute(
           "onclick",
-          `window.location.href='kursbeschreibung.html?title=${encodeURIComponent(
-            course.title
-          )}&date=${encodeURIComponent(
-            course.date
-          )}&location=${encodeURIComponent(
-            course.location
-          )}&type=${encodeURIComponent(
-            course.type
-          )}&onlineorpresence=${encodeURIComponent(
-            course.onlineOrPresence
-          )}&registration=${encodeURIComponent(
-            course.registration
-          )}&registration_link=${encodeURIComponent(
-            course.registration_link
-          )}&cost=${encodeURIComponent(
-            course.cost
-          )}&shortDescriptionOfContent=${encodeURIComponent(
-            course.shortDescriptionOfContent
-          )}&purposegoalsOfTheCourse=${encodeURIComponent(
-            course.purposegoalsOfTheCourse
-          )}&structure=${encodeURIComponent(
-            course?.structure?.content[0].content[0].value
-          )}&requirements=${encodeURIComponent(
-            course?.requirements?.content[0].content[0].value
-          )}&additionalInformation=${encodeURIComponent(
-            course?.additionalInformation?.content[0].content[0].value
-          )}'`
+          `window.location.href='${link}'; return false;`
         );
         moreInfo.textContent = "mehr informationen";
 
