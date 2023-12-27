@@ -17,48 +17,46 @@ function fetchHomeData() {
       data = data.slice(0, 6);
       data.forEach((course) => {
         course = course.fields;
-        console.log(course);
+
+        const link = `kursbeschreibung.html?title=${encodeURIComponent(
+          course.title
+        )}&date=${encodeURIComponent(
+          course.date
+        )}&location=${encodeURIComponent(
+          course.location
+        )}&type=${encodeURIComponent(
+          course.type
+        )}&onlineorpresence=${encodeURIComponent(
+          course.onlineOrPresence
+        )}&registration=${encodeURIComponent(
+          course.registration
+        )}&registration_link=${encodeURIComponent(
+          course.registration_link
+        )}&cost=${encodeURIComponent(
+          course.cost
+        )}&shortDescriptionOfContent=${encodeURIComponent(
+          course.shortDescriptionOfContent
+        )}&purposegoalsOfTheCourse=${encodeURIComponent(
+          course.purposegoalsOfTheCourse
+        )}&structure=${encodeURIComponent(
+          course?.structure?.content[0].content[0].value
+        )}&requirements=${encodeURIComponent(
+          course?.requirements?.content[0].content[0].value
+        )}&additionalInformation=${encodeURIComponent(
+          course?.additionalInformation?.content[0].content[0].value
+        )}`;
+
         const container = document.createElement("div");
-        container.setAttribute("class", "col-xl-4 p-3");
+        container.classList.add("col-xl-4", "p-3");
 
         const card = document.createElement("div");
-        card.setAttribute("class", "cards");
+        card.classList.add("cards", "card-container");
 
-        // Create an anchor tag for the title
         const titleBox = document.createElement("div");
-        titleBox.setAttribute("class", "card-line text-center");
+        titleBox.classList.add("card-line", "text-center");
         titleBox.setAttribute("id", "title");
         const titleLink = document.createElement("a");
-        titleLink.setAttribute(
-          "href",
-          `kursbeschreibung.html?title=${encodeURIComponent(
-            course.title
-          )}&date=${encodeURIComponent(
-            course.date
-          )}&location=${encodeURIComponent(
-            course.location
-          )}&type=${encodeURIComponent(
-            course.type
-          )}&onlineorpresence=${encodeURIComponent(
-            course.onlineOrPresence
-          )}&registration=${encodeURIComponent(
-            course.registration
-          )}&registration_link=${encodeURIComponent(
-            course.registration_link
-          )}&cost=${encodeURIComponent(
-            course.cost
-          )}&shortDescriptionOfContent=${encodeURIComponent(
-            course.shortDescriptionOfContent
-          )}&purposegoalsOfTheCourse=${encodeURIComponent(
-            course.purposegoalsOfTheCourse
-          )}&structure=${encodeURIComponent(
-            course?.structure?.content[0].content[0].value
-          )}&requirements=${encodeURIComponent(
-            course?.requirements?.content[0].content[0].value
-          )}&additionalInformation=${encodeURIComponent(
-            course?.additionalInformation?.content[0].content[0].value
-          )}`
-        );
+        titleLink.setAttribute("href", link);
         titleLink.setAttribute("class", "h-100");
 
         const title = document.createElement("h2");
@@ -66,17 +64,17 @@ function fetchHomeData() {
 
         titleLink.appendChild(title);
         titleBox.appendChild(titleLink);
+
         const kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox =
           document.createElement("div");
-        kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox.setAttribute(
-          "class",
+        kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox.classList.add(
           "card-line"
         );
         const kindAndDateAndNumberOfDaysAndPresenceOrOnline =
           document.createElement("h3");
-        kindAndDateAndNumberOfDaysAndPresenceOrOnline.setAttribute(
-          "class",
-          "typo-bg-green h-100"
+        kindAndDateAndNumberOfDaysAndPresenceOrOnline.classList.add(
+          "typo-bg-green",
+          "h-100"
         );
         kindAndDateAndNumberOfDaysAndPresenceOrOnline.setAttribute(
           "id",
@@ -101,78 +99,53 @@ function fetchHomeData() {
         );
 
         const descriptionBox = document.createElement("div");
-        descriptionBox.setAttribute("class", "card-description");
+        descriptionBox.classList.add("card-description", "overflow-auto");
         const description = document.createElement("div");
         description.setAttribute("id", "description");
+        description.classList.add("typo-bg-green", "card-item-overflow");
 
-        description.setAttribute("class", "typo-bg-green card-item-overflow");
         description.textContent = `${
           !!course.shortDescriptionOfContent
             ? course.shortDescriptionOfContent
             : "Beschreibung ist nicht angegeben"
         }`;
-        description.textContent = course.shortDescriptionOfContent;
+
         descriptionBox.appendChild(description);
 
-        const buttonsConainer = document.createElement("div");
+        const buttonsContainer = document.createElement("div");
+        buttonsContainer.classList.add("d-flex", "justify-content-end");
 
         const bookingButtonBox = document.createElement("div");
-        bookingButtonBox.setAttribute("class", "px-4");
+        bookingButtonBox.classList.add("px-2");
         const bookingButton = document.createElement("button");
-        bookingButton.setAttribute("class", "btn p-2");
+        bookingButton.classList.add("button", "p-2");
         bookingButton.textContent = "Anmeldungslink";
         bookingButtonBox.appendChild(bookingButton);
         bookingButton.setAttribute(
           "onclick",
           `window.open('${course.registration_link}', '_blank')`
         );
+
         const infoButtonBox = document.createElement("div");
-        infoButtonBox.setAttribute("class", "px-4 py-3");
+        infoButtonBox.classList.add("px-2");
         const infoButton = document.createElement("button");
-        infoButton.setAttribute("class", "button");
-        infoButton.textContent = "mehr Informationen";
+        infoButton.classList.add("btn", "p-2");
+        infoButton.textContent = "Mehr Info"; // Updated text content
         infoButtonBox.appendChild(infoButton);
         infoButton.setAttribute(
           "onclick",
-          `window.location.href='kursbeschreibung.html?title=${encodeURIComponent(
-            course.title
-          )}&date=${encodeURIComponent(
-            course.date
-          )}&location=${encodeURIComponent(
-            course.location
-          )}&type=${encodeURIComponent(
-            course.type
-          )}&onlineorpresence=${encodeURIComponent(
-            course.onlineOrPresence
-          )}&registration=${encodeURIComponent(
-            course.registration
-          )}&registration_link=${encodeURIComponent(
-            course.registration_link
-          )}&cost=${encodeURIComponent(
-            course.cost
-          )}&shortDescriptionOfContent=${encodeURIComponent(
-            course.shortDescriptionOfContent
-          )}&purposegoalsOfTheCourse=${encodeURIComponent(
-            course.purposegoalsOfTheCourse
-          )}&structure=${encodeURIComponent(
-            course?.structure?.content[0].content[0].value
-          )}&requirements=${encodeURIComponent(
-            course?.requirements?.content[0].content[0].value
-          )}&additionalInformation=${encodeURIComponent(
-            course?.additionalInformation?.content[0].content[0].value
-          )}'`
+          `window.location.href='${link}'; return false;`
         );
-        buttonsConainer.appendChild(bookingButtonBox);
-        buttonsConainer.appendChild(infoButtonBox);
+
+        buttonsContainer.appendChild(bookingButtonBox);
+        buttonsContainer.appendChild(infoButtonBox);
 
         card.appendChild(titleBox);
         card.appendChild(kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox);
         card.appendChild(descriptionBox);
-        card.appendChild(buttonsConainer);
+        card.appendChild(buttonsContainer);
         container.appendChild(card);
         list.appendChild(container);
-
-        // addPopupIfNeeded(description);
       });
     })
     .catch(console.error);
