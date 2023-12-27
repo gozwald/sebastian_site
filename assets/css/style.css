@@ -402,6 +402,7 @@ footer {
   font-style: italic;
   cursor: pointer;
   color: #214863;
+  padding-left: 10px;
 }
 
 .moreInfoButton:hover {
