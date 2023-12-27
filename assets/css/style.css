@@ -311,7 +311,7 @@ footer {
 .cards {
   background-color: #98caaa;
   padding: 12px;
-  border-radius: 3px;
+  border-radius: 5px;
   height: 350px;
   display: flex;
   flex-direction: column;
