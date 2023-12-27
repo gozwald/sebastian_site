@@ -84,17 +84,12 @@ function fetchHomeData() {
         const date = `${
           !!course.date ? course.date : "Termin ist nicht angegeben"
         }`;
-        const numberOfDays = `${
-          !!course.numberOfDays ? course.numberOfDays : ""
-        }`;
 
         const onlineOrPresence = `${
           !!course.onlineOrPresence ? course.onlineOrPresence : ""
         }`;
 
-        kindAndDateAndNumberOfDaysAndPresenceOrOnline.textContent = `${kind}, ${date}, ${onlineOrPresence} ${
-          numberOfDays ? `, ${numberOfDays} Tage` : ""
-        }`;
+        kindAndDateAndNumberOfDaysAndPresenceOrOnline.textContent = `${kind}, ${date}, ${onlineOrPresence}`;
 
         kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox.appendChild(
           kindAndDateAndNumberOfDaysAndPresenceOrOnline
@@ -144,8 +139,6 @@ function fetchHomeData() {
             course.type
           )}&onlineorpresence=${encodeURIComponent(
             course.onlineOrPresence
-          )}&numberofdays=${encodeURIComponent(
-            course.numberOfDays || ""
           )}&registration=${encodeURIComponent(
             course.registration
           )}&registration_link=${encodeURIComponent(
@@ -219,8 +212,6 @@ function fetchCurrentData() {
             course.type
           )}&onlineorpresence=${encodeURIComponent(
             course.onlineOrPresence
-          )}&numberofdays=${encodeURIComponent(
-            course.numberOfDays || ""
           )}&registration=${encodeURIComponent(
             course.registration
           )}&registration_link=${encodeURIComponent(
@@ -247,10 +238,6 @@ function fetchCurrentData() {
         const date = `${
           !!course.date ? course.date : "Termin ist nicht angegeben"
         }`;
-        const numberOfDays = `${
-          !!course.numberOfDays ? course.numberOfDays : ""
-        }`;
-
         const onlineOrPresence = `${
           !!course.onlineOrPresence ? course.onlineOrPresence : ""
         }`;
@@ -258,9 +245,7 @@ function fetchCurrentData() {
         const description = document.createElement("h3");
         description.setAttribute("class", "pl-3 typo-bg-green");
 
-        description.textContent = `${kind}, ${date}, ${onlineOrPresence} ${
-          numberOfDays ? `, ${numberOfDays} Tage` : ""
-        } ...`;
+        description.textContent = `${kind}, ${date}, ${onlineOrPresence}`;
 
         description.appendChild(moreInfo);
 
@@ -306,22 +291,6 @@ function fetchDescriptionData() {
       ? decodeURIComponent(typeText)
       : "Ort ist nicht angegeben"
   }`;
-
-  // Get the "numberOfDaysText" value
-  const numberOfDaysText = urlParams.get("numberofdays");
-
-  // Get the "Tage" section and the "numberofdays" element
-  const daysSection = document.getElementById("daysSection");
-  const numberOfDays = document.getElementById("numberofdays");
-
-  if (numberOfDaysText && numberOfDaysText !== "undefined") {
-    // If "numberOfDaysText" is defined and not "undefined", set its content and show the "Tage" section
-    numberOfDays.textContent = decodeURIComponent(numberOfDaysText);
-    daysSection.style.display = "block";
-  } else {
-    // If "numberOfDaysText" is not defined or is "undefined", hide the "Tage" section
-    daysSection.style.display = "none";
-  }
 
   const costText = urlParams.get("cost");
   const cost = document.querySelector("#cost");
