@@ -215,17 +215,17 @@ function fetchCurrentData() {
         )}`;
 
         const container = document.createElement("div");
-        container.className = "p-2"; // Adjusted padding for a more compact design
+        container.className = "p-1"; // Adjusted padding for a more compact design
+        container.style.fontSize = "10px"; // Set the font size to make it smaller
 
         const card = document.createElement("div");
         card.className = "current-cards border"; // Added a border for better separation
 
-        const title = document.createElement("h4");
-        title.className = "typo-bg-green mb-2"; // Adjusted margin for better spacing
-        title.id = "title";
+        const title = document.createElement("h6");
+        title.className = "typo-bg-green mb-1"; // Adjusted margin for better spacing
 
-        const anchor = document.createElement("a");
-        anchor.href = link;
+        const anchor = document.createElement("span");
+        anchor.className = "titleTextDescription";
         anchor.setAttribute(
           "onclick",
           `window.location.href='${link}'; return false;`
@@ -246,8 +246,8 @@ function fetchCurrentData() {
         const date = course.date || "Termin ist nicht angegeben";
         const onlineOrPresence = course.onlineOrPresence || "";
 
-        const description = document.createElement("h3");
-        description.className = "pl-2 typo-bg-green";
+        const description = document.createElement("h6");
+        description.className = "pl-1 typo-bg-green";
         description.textContent = `${kind}, ${onlineOrPresence}, ${date}`;
         description.appendChild(moreInfo);
 

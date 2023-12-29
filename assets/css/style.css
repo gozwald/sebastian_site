@@ -304,7 +304,7 @@ footer {
 
 .current-cards {
   background-color: #98caaa;
-  padding: 12px;
+  padding: 8px;
   border-radius: 3px;
 }
 
@@ -437,6 +437,16 @@ footer {
 }
 
 .moreInfoButton:hover {
+  color: #2b658f;
+  text-decoration: underline;
+}
+
+.titleTextDescription {
+  cursor: pointer;
+  color: #214863;
+}
+
+.titleTextDescription:hover {
   color: #2b658f;
   text-decoration: underline;
 }
