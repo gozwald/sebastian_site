@@ -13,7 +13,7 @@ function fetchHomeData() {
     .getEntries({ order: "-sys.createdAt" })
     .then((response) => response.items)
     .then((data) => {
-      const list = document.querySelector("#coureseList");
+      const list = document.querySelector("#courseList");
       data = data.slice(0, 6);
       data.forEach((course) => {
         course = course.fields;
@@ -47,20 +47,30 @@ function fetchHomeData() {
         )}`;
 
         const container = document.createElement("div");
-        container.classList.add("col-xl-4", "p-3");
+        container.classList.add("col-xl-4", "p-3", "position-relative");
 
         const card = document.createElement("div");
-        card.classList.add("cards", "card-container");
+        card.classList.add("cards", "d-flex", "flex-column");
 
         const titleBox = document.createElement("div");
-        titleBox.classList.add("card-line", "text-center");
+        titleBox.classList.add(
+          "card-line",
+          "text-center",
+          "fixed-height-title"
+        );
         titleBox.setAttribute("id", "title");
         const titleLink = document.createElement("a");
         titleLink.setAttribute("href", link);
-        titleLink.setAttribute("class", "h-100");
 
-        const title = document.createElement("h2");
+        const title = document.createElement("div");
+        title.classList.add("font-weight-bold", "fixed-height-content");
         title.textContent = course.title;
+
+        if (title.textContent.length > 50) {
+          title.classList.add("h6");
+        } else {
+          title.classList.add("h5");
+        }
 
         titleLink.appendChild(title);
         titleBox.appendChild(titleLink);
@@ -68,13 +78,14 @@ function fetchHomeData() {
         const kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox =
           document.createElement("div");
         kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox.classList.add(
-          "card-line"
+          "card-line",
+          "fixed-height-subtitle"
         );
         const kindAndDateAndNumberOfDaysAndPresenceOrOnline =
-          document.createElement("h3");
+          document.createElement("div");
         kindAndDateAndNumberOfDaysAndPresenceOrOnline.classList.add(
           "typo-bg-green",
-          "h-100"
+          "fixed-height-content"
         );
         kindAndDateAndNumberOfDaysAndPresenceOrOnline.setAttribute(
           "id",
@@ -92,14 +103,18 @@ function fetchHomeData() {
           !!course.onlineOrPresence ? course.onlineOrPresence : ""
         }`;
 
-        kindAndDateAndNumberOfDaysAndPresenceOrOnline.textContent = `${kind}, ${date}, ${onlineOrPresence}`;
+        kindAndDateAndNumberOfDaysAndPresenceOrOnline.textContent = `${kind}, ${onlineOrPresence}, ${date}`;
 
         kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox.appendChild(
           kindAndDateAndNumberOfDaysAndPresenceOrOnline
         );
 
         const descriptionBox = document.createElement("div");
-        descriptionBox.classList.add("card-description", "overflow-auto");
+        descriptionBox.classList.add(
+          "card-description",
+          "overflow-auto",
+          "fixed-height-description"
+        );
         const description = document.createElement("div");
         description.setAttribute("id", "description");
         description.classList.add("typo-bg-green", "card-item-overflow");
@@ -113,7 +128,11 @@ function fetchHomeData() {
         descriptionBox.appendChild(description);
 
         const buttonsContainer = document.createElement("div");
-        buttonsContainer.classList.add("d-flex", "justify-content-end");
+        buttonsContainer.classList.add(
+          "mt-auto",
+          "d-flex",
+          "justify-content-center"
+        );
 
         const bookingButtonBox = document.createElement("div");
         bookingButtonBox.classList.add("px-2");
@@ -162,7 +181,7 @@ function fetchCurrentData() {
     .getEntries({ order: "-sys.createdAt" })
     .then((response) => response.items)
     .then((data) => {
-      const list = document.querySelector("#coureseList");
+      const list = document.querySelector("#courseList");
 
       data.forEach((course) => {
         course = course.fields;
@@ -196,56 +215,40 @@ function fetchCurrentData() {
         )}`;
 
         const container = document.createElement("div");
-        container.setAttribute("class", "p-3");
+        container.className = "p-2"; // Adjusted padding for a more compact design
 
         const card = document.createElement("div");
-        card.setAttribute("class", "current-cards");
+        card.className = "current-cards border"; // Added a border for better separation
 
         const title = document.createElement("h4");
-        title.setAttribute("class", "typo-bg-green");
-        title.setAttribute("id", "title");
+        title.className = "typo-bg-green mb-2"; // Adjusted margin for better spacing
+        title.id = "title";
 
-        // Create an anchor element
         const anchor = document.createElement("a");
-        // Set the href attribute to the link
-        anchor.setAttribute("href", link);
-        // Set the onclick event for redirection through JavaScript
+        anchor.href = link;
         anchor.setAttribute(
           "onclick",
           `window.location.href='${link}'; return false;`
         );
-
-        // Append the title to the anchor
         anchor.appendChild(document.createTextNode(course.title));
 
-        // Append the anchor to the title
         title.appendChild(anchor);
 
         const moreInfo = document.createElement("span");
-        moreInfo.setAttribute("class", "moreInfoButton");
-
-        // Set the onclick event for redirection through JavaScript
+        moreInfo.className = "moreInfoButton";
         moreInfo.setAttribute(
           "onclick",
           `window.location.href='${link}'; return false;`
         );
-        moreInfo.textContent = "mehr informationen";
+        moreInfo.textContent = "Mehr Info"; // Adjusted text for better clarity
 
-        const kind = `${
-          !!course.type ? course.type : "Art ist nicht angegeben"
-        }`;
-        const date = `${
-          !!course.date ? course.date : "Termin ist nicht angegeben"
-        }`;
-        const onlineOrPresence = `${
-          !!course.onlineOrPresence ? course.onlineOrPresence : ""
-        }`;
+        const kind = course.type || "Art ist nicht angegeben";
+        const date = course.date || "Termin ist nicht angegeben";
+        const onlineOrPresence = course.onlineOrPresence || "";
 
         const description = document.createElement("h3");
-        description.setAttribute("class", "pl-3 typo-bg-green");
-
-        description.textContent = `${kind}, ${date}, ${onlineOrPresence}`;
-
+        description.className = "pl-2 typo-bg-green";
+        description.textContent = `${kind}, ${onlineOrPresence}, ${date}`;
         description.appendChild(moreInfo);
 
         card.appendChild(title);

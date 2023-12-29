@@ -312,11 +312,40 @@ footer {
   background-color: #98caaa;
   padding: 12px;
   border-radius: 5px;
-  height: 350px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
+
+.fixed-height-title {
+  margin-bottom: 20px;
+}
+
+.fixed-height-subtitle {
+  margin-bottom: 20px;
+}
+
+.fixed-height-description {
+  margin-bottom: 20px;
+}
+
+@media (min-width: 1200px) {
+  .fixed-height-title {
+    height: 50px;
+  }
+
+  .fixed-height-subtitle {
+    height: 50px;
+  }
+
+  .fixed-height-description {
+    height: 200px;
+  }
+  .cards {
+    height: 350px;
+  }
+}
+
+
 
 .card-line {
   position: relative;
@@ -396,6 +425,8 @@ footer {
 .typo-bg-green {
   color: #10293f;
 }
+
+
 
 .moreInfoButton {
   font-size: 17px;
