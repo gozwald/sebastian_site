@@ -91,6 +91,19 @@ h3 {
   background-color: #10293f;
 }
 
+.course-type-container {
+  margin-bottom: 20px;
+  border: 1px solid #ddd; /* Border for better separation */
+  padding: 10px;
+  background-color: #b34d4d05; /* Background color for the container */
+}
+
+.course-type-container h5 {
+  color: #333; /* Text color for the header */
+  margin-bottom: 10px;
+}
+
+
 .button {
   font-family: "Open_Sans_Bold", sans-serif;
   box-shadow: 0 0 5px #10293fa6;

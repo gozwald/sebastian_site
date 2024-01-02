@@ -10,7 +10,10 @@ function fetchHomeData() {
   });
 
   client
-    .getEntries({ order: "-sys.createdAt" })
+    .getEntries({
+      content_type: "course",
+      "metadata.tags.sys.id[in]": "landingpage",
+    })
     .then((response) => response.items)
     .then((data) => {
       const list = document.querySelector("#courseList");
@@ -178,86 +181,136 @@ function fetchCurrentData() {
   });
 
   client
-    .getEntries({ order: "-sys.createdAt" })
+    .getEntries({
+      content_type: "course",
+      order: "fields.courseStartingDate",
+    })
     .then((response) => response.items)
     .then((data) => {
+      const groupedCourses = groupByCourseType(data);
+
       const list = document.querySelector("#courseList");
 
-      data.forEach((course) => {
-        course = course.fields;
+      for (const [courseType, courses] of Object.entries(groupedCourses)) {
+        const typeContainer = document.createElement("div");
+        typeContainer.className = "course-type-container";
 
-        const link = `kursbeschreibung.html?title=${encodeURIComponent(
-          course.title
-        )}&date=${encodeURIComponent(
-          course.date
-        )}&location=${encodeURIComponent(
-          course.location
-        )}&type=${encodeURIComponent(
-          course.type
-        )}&onlineorpresence=${encodeURIComponent(
-          course.onlineOrPresence
-        )}&registration=${encodeURIComponent(
-          course.registration
-        )}&registration_link=${encodeURIComponent(
-          course.registration_link
-        )}&cost=${encodeURIComponent(
-          course.cost
-        )}&shortDescriptionOfContent=${encodeURIComponent(
-          course.shortDescriptionOfContent
-        )}&purposegoalsOfTheCourse=${encodeURIComponent(
-          course.purposegoalsOfTheCourse
-        )}&structure=${encodeURIComponent(
-          course?.structure?.content[0].content[0].value
-        )}&requirements=${encodeURIComponent(
-          course?.requirements?.content[0].content[0].value
-        )}&additionalInformation=${encodeURIComponent(
-          course?.additionalInformation?.content[0].content[0].value
-        )}`;
+        const typeHeader = document.createElement("h5");
+        typeHeader.textContent = `${courseType}`;
+        typeContainer.appendChild(typeHeader);
 
-        const container = document.createElement("div");
-        container.className = "p-1"; // Adjusted padding for a more compact design
-        container.style.fontSize = "10px"; // Set the font size to make it smaller
+        courses.forEach((course) => {
+          const link = buildLink(course.fields);
 
-        const card = document.createElement("div");
-        card.className = "current-cards border"; // Added a border for better separation
+          const container = document.createElement("div");
+          container.className = "p-1"; // Adjusted padding for a more compact design
+          container.style.fontSize = "10px"; // Set the font size to make it smaller
 
-        const title = document.createElement("h6");
-        title.className = "typo-bg-green mb-1"; // Adjusted margin for better spacing
+          const card = document.createElement("div");
+          card.className = "current-cards border"; // Added a border for better separation
 
-        const anchor = document.createElement("span");
-        anchor.className = "titleTextDescription";
-        anchor.setAttribute(
-          "onclick",
-          `window.location.href='${link}'; return false;`
-        );
-        anchor.appendChild(document.createTextNode(course.title));
+          const title = document.createElement("h6");
+          title.className = "typo-bg-green mb-1"; // Adjusted margin for better spacing
 
-        title.appendChild(anchor);
+          const anchor = document.createElement("span");
+          anchor.className = "titleTextDescription";
+          anchor.setAttribute(
+            "onclick",
+            `window.location.href='${link}'; return false;`
+          );
+          anchor.appendChild(document.createTextNode(course.fields.title));
 
-        const moreInfo = document.createElement("span");
-        moreInfo.className = "moreInfoButton";
-        moreInfo.setAttribute(
-          "onclick",
-          `window.location.href='${link}'; return false;`
-        );
-        moreInfo.textContent = "Mehr Info"; // Adjusted text for better clarity
+          title.appendChild(anchor);
 
-        const kind = course.type || "Art ist nicht angegeben";
-        const date = course.date || "Termin ist nicht angegeben";
-        const onlineOrPresence = course.onlineOrPresence || "";
+          const moreInfo = document.createElement("span");
+          moreInfo.className = "moreInfoButton";
+          moreInfo.setAttribute(
+            "onclick",
+            `window.location.href='${link}'; return false;`
+          );
+          moreInfo.textContent = "Mehr Info"; // Adjusted text for better clarity
 
-        const description = document.createElement("h6");
-        description.className = "pl-1 typo-bg-green";
-        description.textContent = `${kind}, ${onlineOrPresence}, ${date}`;
-        description.appendChild(moreInfo);
+          const kind = course.fields.type || "Art ist nicht angegeben";
+          const date = course.fields.date || "Termin ist nicht angegeben";
+          const onlineOrPresence = course.fields.onlineOrPresence || "";
 
-        card.appendChild(title);
-        card.appendChild(description);
-        container.appendChild(card);
-        list.appendChild(container);
-      });
+          const description = document.createElement("h6");
+          description.className = "pl-1 typo-bg-green";
+          description.textContent = `${kind}, ${onlineOrPresence}, ${date}`;
+          description.appendChild(moreInfo);
+
+          card.appendChild(title);
+          card.appendChild(description);
+          container.appendChild(card);
+          typeContainer.appendChild(container);
+        });
+
+        list.appendChild(typeContainer);
+      }
     })
     .catch(console.error);
+}
+
+function groupByCourseType(data) {
+  const groupedCourses = {};
+
+  data.forEach((course) => {
+    const courseType = course.fields.courseType || "Unspecified";
+
+    if (!groupedCourses[courseType]) {
+      groupedCourses[courseType] = [];
+    }
+
+    groupedCourses[courseType].push(course);
+  });
+
+  return groupedCourses;
+}
+
+function buildLink(course) {
+  const link = `kursbeschreibung.html?title=${encodeURIComponent(
+    course.title
+  )}&date=${encodeURIComponent(course.date)}&location=${encodeURIComponent(
+    course.location
+  )}&type=${encodeURIComponent(
+    course.type
+  )}&onlineorpresence=${encodeURIComponent(
+    course.onlineOrPresence
+  )}&registration=${encodeURIComponent(
+    course.registration
+  )}&registration_link=${encodeURIComponent(
+    course.registration_link
+  )}&cost=${encodeURIComponent(
+    course.cost
+  )}&shortDescriptionOfContent=${encodeURIComponent(
+    course.shortDescriptionOfContent
+  )}&purposegoalsOfTheCourse=${encodeURIComponent(
+    course.purposegoalsOfTheCourse
+  )}&structure=${encodeURIComponent(
+    course?.structure?.content[0].content[0].value
+  )}&requirements=${encodeURIComponent(
+    course?.requirements?.content[0].content[0].value
+  )}&additionalInformation=${encodeURIComponent(
+    course?.additionalInformation?.content[0].content[0].value
+  )}`;
+
+  return link;
+}
+
+function groupByCourseType(data) {
+  const groupedCourses = {};
+
+  data.forEach((course) => {
+    const courseType = course.fields.courseType || "Unspecified";
+
+    if (!groupedCourses[courseType]) {
+      groupedCourses[courseType] = [];
+    }
+
+    groupedCourses[courseType].push(course);
+  });
+
+  return groupedCourses;
 }
 
 function fetchDescriptionData() {
