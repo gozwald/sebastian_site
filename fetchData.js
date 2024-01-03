@@ -180,6 +180,18 @@ function fetchCurrentData() {
 
       order.forEach((courseType) => {
         orderedGroups[courseType] = groupedCourses[courseType];
+        // check for course tag "prio" and move to top
+
+        if (orderedGroups[courseType]) {
+          const prioIndex = orderedGroups[courseType].findIndex((course) => {
+            return course.metadata.tags.find((tag) => tag.sys.id === "prio");
+          });
+
+          if (prioIndex > -1) {
+            const prioCourse = orderedGroups[courseType].splice(prioIndex, 1);
+            orderedGroups[courseType].unshift(prioCourse[0]);
+          }
+        }
       });
 
       const list = document.querySelector("#courseList");
