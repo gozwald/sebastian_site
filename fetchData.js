@@ -22,33 +22,7 @@ function fetchHomeData() {
       data.forEach((course) => {
         course = course.fields;
 
-        const link = `kursbeschreibung.html?title=${encodeURIComponent(
-          course.title
-        )}&date=${encodeURIComponent(
-          course.date
-        )}&location=${encodeURIComponent(
-          course.location
-        )}&type=${encodeURIComponent(
-          course.type
-        )}&onlineorpresence=${encodeURIComponent(
-          course.onlineOrPresence
-        )}&registration=${encodeURIComponent(
-          course.registration
-        )}&registration_link=${encodeURIComponent(
-          course.registration_link
-        )}&cost=${encodeURIComponent(
-          course.cost
-        )}&shortDescriptionOfContent=${encodeURIComponent(
-          course.shortDescriptionOfContent
-        )}&purposegoalsOfTheCourse=${encodeURIComponent(
-          course.purposegoalsOfTheCourse
-        )}&structure=${encodeURIComponent(
-          course?.structure?.content[0].content[0].value
-        )}&requirements=${encodeURIComponent(
-          course?.requirements?.content[0].content[0].value
-        )}&additionalInformation=${encodeURIComponent(
-          course?.additionalInformation?.content[0].content[0].value
-        )}`;
+        const link = buildLink(course);
 
         const container = document.createElement("div");
         container.classList.add("col-xl-4", "p-3", "position-relative");
@@ -190,9 +164,33 @@ function fetchCurrentData() {
     .then((data) => {
       const groupedCourses = groupByCourseType(data);
 
+      // ensure the following order in groups
+
+      const order = [
+        "Gewaltfreie Kommunikation",
+        "Emotionale Selbstregulation",
+        "Schluss mit Aufschieben",
+        "Grenzen setzen",
+        "Konflikte meistern",
+        "New Work",
+        "Sonstiges",
+      ];
+
+      const orderedGroups = {};
+
+      order.forEach((courseType) => {
+        orderedGroups[courseType] = groupedCourses[courseType];
+      });
+
       const list = document.querySelector("#courseList");
 
-      for (const [courseType, courses] of Object.entries(groupedCourses)) {
+      for (const [courseType, courses] of Object.entries(orderedGroups)) {
+        // only show course types with courses
+
+        if (!courses) {
+          continue;
+        }
+
         const typeContainer = document.createElement("div");
         typeContainer.className = "course-type-container";
 
@@ -288,14 +286,26 @@ function buildLink(course) {
   )}&purposegoalsOfTheCourse=${encodeURIComponent(
     course.purposegoalsOfTheCourse
   )}&structure=${encodeURIComponent(
-    course?.structure?.content[0].content[0].value
+    parseRtf(course?.structure?.content[0].content)
   )}&requirements=${encodeURIComponent(
-    course?.requirements?.content[0].content[0].value
+    parseRtf(course?.requirements?.content[0].content)
   )}&additionalInformation=${encodeURIComponent(
-    course?.additionalInformation?.content[0].content[0].value
+    parseRtf(course?.additionalInformation?.content[0].content)
   )}`;
 
   return link;
+}
+
+function parseRtf(rtf) {
+  const result = rtf.map((item) => {
+    if (item.nodeType === "text") {
+      return `<p>${item.value}</p>`;
+    } else if (item.nodeType === "hyperlink") {
+      return `<a href="${item.data.uri}">${item.content[0].value}</a>`;
+    }
+  });
+
+  return result.join("");
 }
 
 function groupByCourseType(data) {
@@ -388,7 +398,7 @@ function fetchDescriptionData() {
 
   const structureText = urlParams.get("structure");
   const structure = document.querySelector("#structure");
-  structure.textContent = `${
+  structure.innerHTML = `${
     structureText !== "undefined"
       ? decodeURIComponent(structureText)
       : "Ablauf ist nicht angegeben"
@@ -396,7 +406,7 @@ function fetchDescriptionData() {
 
   const requirementsText = urlParams.get("requirements");
   const requirements = document.querySelector("#requirements");
-  requirements.textContent = `${
+  requirements.innerHTML = `${
     requirementsText !== "undefined"
       ? decodeURIComponent(requirementsText)
       : "Voraussetzungen sind nicht angegeben"
@@ -406,7 +416,7 @@ function fetchDescriptionData() {
   const additionalInformation = document.querySelector(
     "#additionalInformation"
   );
-  additionalInformation.textContent = `${
+  additionalInformation.innerHTML = `${
     additionalInformationText !== "undefined"
       ? decodeURIComponent(additionalInformationText)
       : "Vertiefende Informationen ist nicht angegeben"
