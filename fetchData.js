@@ -416,9 +416,24 @@ function fetchDescriptionData() {
   const additionalInformation = document.querySelector(
     "#additionalInformation"
   );
+
+  const parseedHtml = decodeURIComponent(additionalInformationText);
+  const htmlDoc = new DOMParser().parseFromString(parseedHtml, "text/html");
+
+  const links = htmlDoc.querySelectorAll("a");
+
+  if (links.length > 0) {
+    links.forEach((link) => {
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener noreferrer");
+      link.setAttribute("id", "registration_link");
+      link.style.color = "#214863";
+    });
+  }
+
   additionalInformation.innerHTML = `${
     additionalInformationText !== "undefined"
-      ? decodeURIComponent(additionalInformationText)
+      ? htmlDoc.body.innerHTML
       : "Vertiefende Informationen ist nicht angegeben"
   }`;
 }

@@ -123,6 +123,21 @@ h3 {
   background-color: #468f15f0;
 }
 
+.button-hover {
+  font-family: "Open_Sans_Bold", sans-serif;
+  box-shadow: 0 0 5px #10293fa6;
+  padding: 10px 20px;
+  font-size: 14px;
+  line-height: 27px;
+  background-color: #468f15ad;
+  color: #fffff9;
+  border-radius: 5px;
+  white-space: normal;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+}
+
 .caption {
   font-family: "Open_Sans_Reg", sans-serif;
   font-size: 15.4px;
@@ -457,6 +472,11 @@ footer {
 .titleTextDescription {
   cursor: pointer;
   color: #214863;
+}
+
+#registration_link:hover {
+  color: #2b658f;
+  text-decoration: underline;
 }
 
 .titleTextDescription:hover {
