@@ -13,6 +13,7 @@ function fetchHomeData() {
     .getEntries({
       content_type: "course",
       "metadata.tags.sys.id[in]": "landingpage",
+      order: "fields.courseStartingDate",
     })
     .then((response) => response.items)
     .then((data) => {
@@ -67,7 +68,7 @@ function fetchHomeData() {
 
         const title = document.createElement("div");
         title.classList.add("font-weight-bold", "fixed-height-content");
-        title.textContent = course.title;
+        title.textContent = course.shortTitle;
 
         if (title.textContent.length > 50) {
           title.classList.add("h6");
