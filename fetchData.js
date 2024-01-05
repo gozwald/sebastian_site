@@ -375,8 +375,6 @@ function fetchDescriptionData() {
   }`;
 
   const locationText = urlParams.get("location");
-  // const onlineorpresence = urlParams.get("onlineorpresence");
-  // ${onlineorpresence !== "undefined" ? onlineorpresence : ""}
 
   const location = document.querySelector("#location");
   location.textContent = `${
