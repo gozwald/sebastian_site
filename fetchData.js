@@ -18,7 +18,6 @@ function fetchHomeData() {
     .then((response) => response.items)
     .then((data) => {
       const list = document.querySelector("#courseList");
-      data = data.slice(0, 6);
       data.forEach((course) => {
         course = course.fields;
 
@@ -298,11 +297,11 @@ function buildLink(course) {
   )}&purposegoalsOfTheCourse=${encodeURIComponent(
     course.purposegoalsOfTheCourse
   )}&structure=${encodeURIComponent(
-    parseRtf(course?.structure?.content[0].content)
+    parseRtf(course?.structure?.content)
   )}&requirements=${encodeURIComponent(
-    parseRtf(course?.requirements?.content[0].content)
+    parseRtf(course?.requirements?.content)
   )}&additionalInformation=${encodeURIComponent(
-    parseRtf(course?.additionalInformation?.content[0].content)
+    parseRtf(course?.additionalInformation?.content)
   )}`;
 
   return link;
@@ -310,11 +309,35 @@ function buildLink(course) {
 
 function parseRtf(rtf) {
   const result = rtf.map((item) => {
-    if (item.nodeType === "text") {
-      return `<p>${item.value}</p>`;
-    } else if (item.nodeType === "hyperlink") {
-      return `<a href="${item.data.uri}">${item.content[0].value}</a>`;
-    }
+    const contentArray = item.content;
+
+    const content = contentArray.map((item) => {
+      if (item.nodeType === "text") {
+        return `<p>${item.value}</p>`;
+      } else if (item.nodeType === "hyperlink") {
+        return `<a href="${item.data.uri}">${item.content[0].value}</a>`;
+      } else if (item.nodeType === "embedded-asset-block") {
+        return `<img src="${item.data.target.fields.file.url}" alt="${item.data.target.fields.title}" />`;
+      } else if (item.nodeType === "paragraph") {
+        return `<p>${item.content[0].value}</p>`;
+      } else if (item.nodeType === "unordered-list") {
+        const listItems = item.content.map((item) => {
+          return `<li>${item.content[0].value}</li>`;
+        });
+
+        return `<ul>${listItems.join("")}</ul>`;
+      } else if (item.nodeType === "ordered-list") {
+        const listItems = item.content.map((item) => {
+          return `<li>${item.content[0].value}</li>`;
+        });
+
+        return `<ol>${listItems.join("")}</ol>`;
+      } else if (item.nodeType === "blockquote") {
+        return `<blockquote>${item.content[0].value}</blockquote>`;
+      }
+    });
+
+    return content.join("");
   });
 
   return result.join("");
@@ -410,17 +433,54 @@ function fetchDescriptionData() {
 
   const structureText = urlParams.get("structure");
   const structure = document.querySelector("#structure");
+
+  const parseedHtmlStructure = decodeURIComponent(structureText);
+
+  const htmlDocStructure = new DOMParser().parseFromString(
+    parseedHtmlStructure,
+    "text/html"
+  );
+
+  const linksStructure = htmlDocStructure.querySelectorAll("a");
+
+  if (linksStructure.length > 0) {
+    linksStructure.forEach((link) => {
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener noreferrer");
+      link.setAttribute("id", "registration_link");
+      link.style.color = "#214863";
+    });
+  }
+
   structure.innerHTML = `${
     structureText !== "undefined"
-      ? decodeURIComponent(structureText)
+      ? htmlDocStructure.body.innerHTML
       : "Ablauf ist nicht angegeben"
   }`;
 
   const requirementsText = urlParams.get("requirements");
   const requirements = document.querySelector("#requirements");
+
+  const parseedHtmlRequirements = decodeURIComponent(requirementsText);
+  const htmlDocRequirements = new DOMParser().parseFromString(
+    parseedHtmlRequirements,
+    "text/html"
+  );
+
+  const linksRequirements = htmlDocRequirements.querySelectorAll("a");
+
+  if (linksRequirements.length > 0) {
+    linksRequirements.forEach((link) => {
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener noreferrer");
+      link.setAttribute("id", "registration_link");
+      link.style.color = "#214863";
+    });
+  }
+
   requirements.innerHTML = `${
     requirementsText !== "undefined"
-      ? decodeURIComponent(requirementsText)
+      ? htmlDocRequirements.body.innerHTML
       : "Voraussetzungen sind nicht angegeben"
   }`;
 
