@@ -18,10 +18,10 @@ function fetchHomeData() {
     .then((response) => response.items)
     .then((data) => {
       const list = document.querySelector("#courseList");
-      data.forEach((course) => {
-        course = course.fields;
+      data.forEach((coursedata) => {
+        const link = buildLink(coursedata.sys.id);
 
-        const link = buildLink(course);
+        let course = coursedata.fields;
 
         const container = document.createElement("div");
         container.classList.add("col-xl-4", "p-3", "position-relative");
@@ -209,8 +209,10 @@ function fetchCurrentData() {
         typeHeader.textContent = `${courseType}`;
         typeContainer.appendChild(typeHeader);
 
-        courses.forEach((course) => {
-          const link = buildLink(course.fields);
+        courses.forEach((coursedata) => {
+          const link = buildLink(coursedata.sys.id);
+
+          let course = coursedata.fields;
 
           const container = document.createElement("div");
           container.className = "p-1"; // Adjusted padding for a more compact design
@@ -228,7 +230,7 @@ function fetchCurrentData() {
             "onclick",
             `window.location.href='${link}'; return false;`
           );
-          anchor.appendChild(document.createTextNode(course.fields.title));
+          anchor.appendChild(document.createTextNode(course.title));
 
           title.appendChild(anchor);
 
@@ -240,9 +242,9 @@ function fetchCurrentData() {
           );
           moreInfo.textContent = "Mehr Info"; // Adjusted text for better clarity
 
-          const kind = course.fields.type || "Art ist nicht angegeben";
-          const date = course.fields.date || "Termin ist nicht angegeben";
-          const onlineOrPresence = course.fields.onlineOrPresence || "";
+          const kind = course.type || "Art ist nicht angegeben";
+          const date = course.date || "Termin ist nicht angegeben";
+          const onlineOrPresence = course.onlineOrPresence || "";
 
           const description = document.createElement("h6");
           description.className = "pl-1 typo-bg-green";
@@ -277,32 +279,37 @@ function groupByCourseType(data) {
   return groupedCourses;
 }
 
-function buildLink(course) {
-  const link = `kursbeschreibung.html?title=${encodeURIComponent(
-    course.title
-  )}&date=${encodeURIComponent(course.date)}&location=${encodeURIComponent(
-    course.location
-  )}&type=${encodeURIComponent(
-    course.type
-  )}&onlineorpresence=${encodeURIComponent(
-    course.onlineOrPresence
-  )}&registration=${encodeURIComponent(
-    course.registration
-  )}&registration_link=${encodeURIComponent(
-    course.registration_link
-  )}&cost=${encodeURIComponent(
-    course.cost
-  )}&shortDescriptionOfContent=${encodeURIComponent(
-    course.shortDescriptionOfContent
-  )}&purposegoalsOfTheCourse=${encodeURIComponent(
-    course.purposegoalsOfTheCourse
-  )}&structure=${encodeURIComponent(
-    parseRtf(course?.structure?.content)
-  )}&requirements=${encodeURIComponent(
-    parseRtf(course?.requirements?.content)
-  )}&additionalInformation=${encodeURIComponent(
-    parseRtf(course?.additionalInformation?.content)
-  )}`;
+function buildLink(courseid) {
+  // link should only return the id of the course
+
+  const link = `kursbeschreibung.html?id=${courseid}`;
+
+  // legacy code for reference
+  // const link = `kursbeschreibung.html?title=${encodeURIComponent(
+  //   course.title
+  // )}&date=${encodeURIComponent(course.date)}&location=${encodeURIComponent(
+  //   course.location
+  // )}&type=${encodeURIComponent(
+  //   course.type
+  // )}&onlineorpresence=${encodeURIComponent(
+  //   course.onlineOrPresence
+  // )}&registration=${encodeURIComponent(
+  //   course.registration
+  // )}&registration_link=${encodeURIComponent(
+  //   course.registration_link
+  // )}&cost=${encodeURIComponent(
+  //   course.cost
+  // )}&shortDescriptionOfContent=${encodeURIComponent(
+  //   course.shortDescriptionOfContent
+  // )}&purposegoalsOfTheCourse=${encodeURIComponent(
+  //   course.purposegoalsOfTheCourse
+  // )}&structure=${encodeURIComponent(
+  //   parseRtf(course?.structure?.content)
+  // )}&requirements=${encodeURIComponent(
+  //   parseRtf(course?.requirements?.content)
+  // )}&additionalInformation=${encodeURIComponent(
+  //   parseRtf(course?.additionalInformation?.content)
+  // )}`;
 
   return link;
 }
@@ -361,137 +368,71 @@ function groupByCourseType(data) {
 
 function fetchDescriptionData() {
   const urlParams = new URLSearchParams(window.location.search);
+  const courseId = urlParams.get("id");
 
-  const titleText = urlParams.get("title");
-  const title = document.querySelector("#title");
-  title.textContent = decodeURIComponent(titleText);
+  const client = contentful.createClient({
+    space,
+    environment,
+    accessToken,
+  });
 
-  const dateText = urlParams.get("date");
-  const date = document.querySelector("#date");
-  date.textContent = `${
-    dateText !== "undefined"
-      ? decodeURIComponent(dateText)
-      : "Termin ist nicht angegeben"
-  }`;
-
-  const locationText = urlParams.get("location");
-
-  const location = document.querySelector("#location");
-  location.textContent = `${
-    locationText !== "undefined"
-      ? decodeURIComponent(locationText)
-      : "Ort ist nicht angegeben"
-  }`;
-
-  const typeText = urlParams.get("type");
-  const type = document.querySelector("#type");
-  type.textContent = `${
-    typeText !== "undefined"
-      ? decodeURIComponent(typeText)
-      : "Ort ist nicht angegeben"
-  }`;
-
-  const costText = urlParams.get("cost");
-  const cost = document.querySelector("#cost");
-  cost.textContent = `${
-    costText !== "undefined"
-      ? decodeURIComponent(costText)
-      : "Kosten ist nicht angegeben"
-  }`;
-
-  const registrationText = urlParams.get("registration");
-  const registration = document.querySelector("#registration");
-  registration.textContent = `${
-    registrationText !== "undefined"
-      ? decodeURIComponent(registrationText)
-      : "Anmeldung ist nicht angegeben"
-  }`;
-
-  const registrationLinkText = urlParams.get("registration_link");
-  const registrationLink = document.querySelector("#registration_link");
-  registrationLink.textContent = `${
-    registrationLinkText !== "undefined"
-      ? decodeURIComponent(registrationLinkText)
-      : "Anmeldung Link ist nicht angegeben"
-  }`;
-  registrationLink.setAttribute(
-    "onclick",
-    `window.open('${registrationLinkText}', '_blank')`
-  );
-
-  const purposegoalsOfTheCourseText = urlParams.get("purposegoalsOfTheCourse");
-  const purposegoalsOfTheCourse = document.querySelector(
-    "#purposegoalsOfTheCourse"
-  );
-  purposegoalsOfTheCourse.textContent = `${
-    purposegoalsOfTheCourseText !== "undefined"
-      ? decodeURIComponent(purposegoalsOfTheCourseText)
-      : "Intention/Ziele des Kurses sind nicht angegeben"
-  }`;
-
-  const structureText = urlParams.get("structure");
-  const structure = document.querySelector("#structure");
-
-  const parseedHtmlStructure = decodeURIComponent(structureText);
-
-  const htmlDocStructure = new DOMParser().parseFromString(
-    parseedHtmlStructure,
-    "text/html"
-  );
-
-  const linksStructure = htmlDocStructure.querySelectorAll("a");
-
-  if (linksStructure.length > 0) {
-    linksStructure.forEach((link) => {
-      link.setAttribute("target", "_blank");
-      link.setAttribute("rel", "noopener noreferrer");
-      link.setAttribute("id", "registration_link");
-      link.style.color = "#214863";
-    });
+  if (!courseId) {
+    console.error("Course ID not found in URL parameters.");
+    return;
   }
 
-  structure.innerHTML = `${
-    structureText !== "undefined"
-      ? htmlDocStructure.body.innerHTML
-      : "Ablauf ist nicht angegeben"
-  }`;
+  client
+    .getEntry(courseId)
+    .then((entry) => {
+      const course = entry.fields;
 
-  const requirementsText = urlParams.get("requirements");
-  const requirements = document.querySelector("#requirements");
+      document.querySelector("#title").textContent =
+        course.title || "Title is not provided";
+      document.querySelector("#date").textContent = course.date
+        ? course.date
+        : "Date is not provided";
+      document.querySelector("#location").textContent =
+        course.location || "Location is not provided";
+      document.querySelector("#type").textContent =
+        course.type || "Type is not provided";
+      document.querySelector("#cost").textContent =
+        course.cost || "Cost is not provided";
+      document.querySelector("#registration").textContent =
+        course.registration || "Registration info is not provided";
 
-  const parseedHtmlRequirements = decodeURIComponent(requirementsText);
-  const htmlDocRequirements = new DOMParser().parseFromString(
-    parseedHtmlRequirements,
-    "text/html"
-  );
+      const registrationLink = document.querySelector("#registration_link");
+      registrationLink.textContent =
+        course.registration_link || "Registration link is not provided";
 
-  const linksRequirements = htmlDocRequirements.querySelectorAll("a");
+      document.querySelector("#purposegoalsOfTheCourse").textContent =
+        course.purposegoalsOfTheCourse ||
+        "Purpose/goals of the course are not provided";
 
-  if (linksRequirements.length > 0) {
-    linksRequirements.forEach((link) => {
-      link.setAttribute("target", "_blank");
-      link.setAttribute("rel", "noopener noreferrer");
-      link.setAttribute("id", "registration_link");
-      link.style.color = "#214863";
-    });
+      setContentWithHtml("#structure", parseRtf(course.structure.content));
+      setContentWithHtml(
+        "#requirements",
+        parseRtf(course.requirements.content)
+      );
+      setContentWithHtml(
+        "#additionalInformation",
+        parseRtf(course.additionalInformation.content)
+      );
+    })
+    .catch(console.error);
+}
+
+function setContentWithHtml(selector, htmlContent) {
+  const element = document.querySelector(selector);
+  if (!htmlContent) {
+    element.innerHTML = "Information is not provided";
+    return;
   }
 
-  requirements.innerHTML = `${
-    requirementsText !== "undefined"
-      ? htmlDocRequirements.body.innerHTML
-      : "Voraussetzungen sind nicht angegeben"
-  }`;
-
-  const additionalInformationText = urlParams.get("additionalInformation");
-  const additionalInformation = document.querySelector(
-    "#additionalInformation"
+  const parsedHtml = new DOMParser().parseFromString(
+    decodeURIComponent(htmlContent),
+    "text/html"
   );
-
-  const parseedHtml = decodeURIComponent(additionalInformationText);
-  const htmlDoc = new DOMParser().parseFromString(parseedHtml, "text/html");
-
-  const links = htmlDoc.querySelectorAll("a");
-
+  const links = parsedHtml.querySelectorAll("a");
   if (links.length > 0) {
     links.forEach((link) => {
       link.setAttribute("target", "_blank");
@@ -501,9 +442,5 @@ function fetchDescriptionData() {
     });
   }
 
-  additionalInformation.innerHTML = `${
-    additionalInformationText !== "undefined"
-      ? htmlDoc.body.innerHTML
-      : "Vertiefende Informationen ist nicht angegeben"
-  }`;
+  element.innerHTML = parsedHtml.body.innerHTML;
 }
