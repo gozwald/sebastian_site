@@ -404,6 +404,13 @@ function fetchDescriptionData() {
       registrationLink.textContent =
         course.registration_link || "Registration link is not provided";
 
+      if (course.registration_link) {
+        registrationLink.setAttribute("href", course.registration_link);
+        registrationLink.setAttribute("target", "_blank");
+        registrationLink.setAttribute("rel", "noopener noreferrer");
+        registrationLink.style.color = "#214863";
+      }
+
       document.querySelector("#purposegoalsOfTheCourse").textContent =
         course.purposegoalsOfTheCourse ||
         "Purpose/goals of the course are not provided";
