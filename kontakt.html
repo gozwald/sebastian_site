@@ -11,7 +11,13 @@
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             function onSubmit(token) {
-              document.getElementById("demo-form").submit();
+                console.log('reCAPTCHA token:', token);
+                // Check if reCAPTCHA response token is valid
+                if(token) {
+                    document.getElementById("demo-form").submit();
+                } else {
+                    alert('Please complete the CAPTCHA to proceed!');
+                }
             }
           </script>
         <link rel="stylesheet" href="assets/js/fnon.min.css"/> 
@@ -92,28 +98,25 @@
                                     <div class="col-12 pt-3"> 
                                         <textarea id="message" name="message" class="form-input" required placeholder="Anfragetext"></textarea> 
                                     </div>
-                                    <!-- <div class="d-lg-flex col-12 justify-content-between">  -->
+                          
                                         <div class="col-lg-5 pt-3">
                                             <input
                                             type="hidden"
                                             name="_redirect"
-                                            value="https://www.sebastianteubner.de/thankyou.html"
+                                            value="https://gozwald.github.io/thankyou.html"
                                           />
-                                            <input type="submit" data-callback="onSubmit" class="btn" value="Anfrage senden" id="btnsubmit"> 
-                                            <!-- <button class="g-recaptcha" data-sitekey="your_site_key" data-callback="onSubmit">Submit</button> -->
-                                            <div data-badge="bottomleft" class="g-recaptcha" data-sitekey="6LcvSEYiAAAAAKfud3YDik9_L9xIaOUfygHMt7Sa"></div>
+                                            <input type="submit" data-callback="onSubmit" class="btn" disabled value="Anfrage senden" id="btnsubmit"> 
+    
+                                            <div data-callback="callback" data-badge="bottomleft" class="g-recaptcha" data-sitekey="6LcvSEYiAAAAAKfud3YDik9_L9xIaOUfygHMt7Sa"></div>
                                         </div>
-                                        <!-- <div class="g-recaptcha pt-3 pt-lg-0" data-callback="callback" data-sitekey="6LcvSEYiAAAAAKfud3YDik9_L9xIaOUfygHMt7Sa"></div>  -->
-  
-                                    <!-- </div>                               -->
                                 </div>                                 
                             </form>   
-                            <!-- <script type="text/javascript">
+                            <script type="text/javascript">
                                 function callback() {
                                   const submitButton = document.getElementById("btnsubmit");
                                   submitButton.removeAttribute("disabled");
                                 }
-                              </script>                           -->
+                              </script>                          
                         </div>                         
                     </div>                     
                 </div>                 
