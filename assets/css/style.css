@@ -103,7 +103,6 @@ h3 {
   margin-bottom: 10px;
 }
 
-
 .button {
   font-family: "Open_Sans_Bold", sans-serif;
   box-shadow: 0 0 5px #10293fa6;
@@ -194,6 +193,279 @@ textarea.form-input {
   color: white;
 }
 
+
+#courseList .course-card {
+  background-color: #98caaa; /* Green background */
+  border: 1px solid #82b396; /* Slightly darker green border for definition */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+  padding: 15px; /* Reduced padding from 20px to make box more compact */
+  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* For equal height cards in a row */
+}
+
+#courseList .course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#courseList .course-card-img { /* If you add images to cards */
+  width: 100%;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  margin-bottom: 20px;
+  object-fit: cover; /* Ensures image covers the area well */
+}
+
+#courseList .course-card-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allows content to fill card height */
+}
+
+#courseList .course-card-title {
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  font-size: 1.35rem; /* Title font size */
+  color: #2C3E50; 
+  margin-bottom: 10px; 
+  height: 3.8em; /* Fixed height for approx. 2 lines (1.35rem * 1.4 line-height * 2 lines) */
+  line-height: 1.4; /* Explicit line-height for consistent height calculation */
+  overflow: hidden; /* Necessary for text-overflow and -webkit-line-clamp */
+  display: -webkit-box; /* Enables -webkit-line-clamp */
+  -webkit-line-clamp: 2; /* Limit text to 2 lines */
+  -webkit-box-orient: vertical; /* Required for -webkit-line-clamp */
+  text-overflow: ellipsis; /* Fallback for browsers not supporting -webkit-line-clamp for single line */
+}
+
+#courseList .course-card-title a { /* Ensure link inside title is also white */
+  color: #2C3E50; /* Darker text for contrast */
+  text-decoration: none;
+}
+
+#courseList .course-card-title a:hover {
+  text-decoration: underline;
+}
+
+#courseList .course-card-meta { /* Style for the meta information paragraph */
+  font-family: 'Lato', sans-serif;
+  font-size: 1.2rem; /* << INCREASED SUBTITLE FONT SIZE SIGNIFICANTLY */
+  color: #34495E; 
+  margin-bottom: 12px; 
+  line-height: 1.5;   /* Explicit line-height for consistent height calculation */
+  height: 3.6em;      /* Fixed height for approx. 2 lines (1.2rem * 1.5 line-height * 2 lines) */
+  overflow: hidden; /* Necessary for text-overflow and -webkit-line-clamp */
+  display: -webkit-box; /* Enables -webkit-line-clamp */
+  -webkit-line-clamp: 2; /* Limit text to 2 lines */
+  -webkit-box-orient: vertical; /* Required for -webkit-line-clamp */
+  text-overflow: ellipsis; /* Fallback */
+}
+
+#courseList .course-card-description {
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem; 
+  line-height: 1.7; 
+  color: #2C3E50; 
+  flex-grow: 1; /* Allows this section to take up remaining space before buttons */
+  margin-bottom: 20px;
+  height: 120px; /* Fixed height for the description area */
+  overflow-y: auto; /* Adds a scrollbar if content exceeds height */
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #2C3E50 #98caaa; /* For Firefox: thumb and track color */
+}
+
+/* Webkit custom scrollbar for description */
+#courseList .course-card-description::-webkit-scrollbar {
+  width: 6px;
+}
+
+#courseList .course-card-description::-webkit-scrollbar-track {
+  background: rgba(152, 202, 170, 0.5); /* Lighter track, semi-transparent card green */
+  border-radius: 3px;
+}
+
+#courseList .course-card-description::-webkit-scrollbar-thumb {
+  background-color: #2C3E50; /* Scrollbar thumb color */
+  border-radius: 3px;
+}
+
+#courseList .course-card-description::-webkit-scrollbar-thumb:hover {
+  background-color: #34495E; /* Darker on hover */
+}
+
+/* Container for buttons to make them side-by-side */
+#courseList .course-card .buttons-container {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+  align-items: center; /* Vertically align items if they have different heights */
+  justify-content: center; /* Add this to center the buttons */
+}
+
+#courseList .course-card-button {
+  background-color: #2C3E50; 
+  border-color: #2C3E50;
+  color: #fffff9; 
+  padding: 8px 15px; /* Reduced padding */
+  font-size: 0.78rem; /* Reduced font size */
+  font-weight: 700;
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  text-decoration: none; 
+  line-height: 1.4; /* Adjusted line-height slightly for smaller font */
+  text-align: center;
+  flex-grow: 0; 
+  flex-shrink: 0; 
+  width: auto !important; /* Crucial for overriding general .btn width */
+}
+
+#courseList .course-card-button:hover {
+  background-color: #34495E; /* Darker shade on hover */
+  border-color: #34495E;
+  color: #fffff9; /* Ensure text color remains on hover */
+}
+
+#courseList .course-card-booking-button {
+  background-color: #468f15 !important; /* New solid green */
+  border-color: #3a7511 !important;    /* Slightly darker border for this green */
+  color: #fffff9 !important;           /* Ensure text is white */
+}
+
+#courseList .course-card-booking-button:hover {
+  background-color: #3a7511 !important; /* Darker green on hover */
+  border-color: #2e5c0d !important;
+}
+
+.caption {
+  font-family: "Open_Sans_Reg", sans-serif;
+  font-size: 15.4px;
+  line-height: 23.1px;
+  letter-spacing: 0.1px;
+}
+
+.title {
+  font-family: "PT_Serif_Reg", serif;
+  font-size: 22.5px;
+  line-height: 21px;
+  letter-spacing: 1.13px;
+  margin-bottom: 0px;
+  padding-top: 4px;
+}
+
+#courseList .course-card {
+  background-color: #98caaa; /* Green background */
+  border: 1px solid #82b396; /* Slightly darker green border for definition */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+  padding: 25px;
+  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* For equal height cards in a row */
+}
+
+#courseList .course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#courseList .course-card-img { /* If you add images to cards */
+  width: 100%;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  margin-bottom: 20px;
+  object-fit: cover; /* Ensures image covers the area well */
+}
+
+#courseList .course-card-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allows content to fill card height */
+}
+
+#courseList .course-card-title {
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  font-size: 1.35rem;
+  color: #2C3E50; /* Darker text for contrast */
+  margin-bottom: 12px;
+}
+
+#courseList .course-card-title a { /* Ensure link inside title is also white */
+  color: #2C3E50; /* Darker text for contrast */
+  text-decoration: none;
+}
+
+#courseList .course-card-title a:hover {
+  text-decoration: underline;
+}
+
+#courseList .course-card-meta { /* Style for the meta information paragraph */
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem; /* << INCREASED SUBTITLE FONT SIZE SIGNIFICANTLY */
+  color: #34495E; /* Slightly lighter dark color for meta, but still dark */
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+#courseList .course-card-description {
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem; /* Standard body text size */
+  line-height: 1.7; /* Improved readability */
+  color: #2C3E50; /* Darker text for contrast */
+  flex-grow: 1; /* Pushes button to bottom */
+  margin-bottom: 20px;
+}
+
+/* Container for buttons to make them side-by-side */
+#courseList .course-card .buttons-container {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+  align-items: center; /* Vertically align items if they have different heights */
+  justify-content: center; /* Add this to center the buttons */
+}
+
+#courseList .course-card-button {
+  background-color: #2C3E50; 
+  border-color: #2C3E50;
+  color: #fffff9; 
+  padding: 8px 15px; /* Reduced padding */
+  font-size: 0.78rem; /* Reduced font size */
+  font-weight: 700;
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  text-decoration: none; 
+  line-height: 1.4; /* Adjusted line-height slightly for smaller font */
+  text-align: center;
+  flex-grow: 0; 
+  flex-shrink: 0; 
+  width: auto !important; /* Crucial for overriding general .btn width */
+}
+
+#courseList .course-card-button:hover {
+  background-color: #34495E; /* Darker shade on hover */
+  border-color: #34495E;
+  color: #fffff9; /* Ensure text color remains on hover */
+}
+
+#courseList .course-card-booking-button {
+  background-color: #468f15 !important; /* New solid green */
+  border-color: #3a7511 !important;    /* Slightly darker border for this green */
+  color: #fffff9 !important;           /* Ensure text is white */
+}
+
+#courseList .course-card-booking-button:hover {
+  background-color: #3a7511 !important; /* Darker green on hover */
+  border-color: #2e5c0d !important;
+}
+
 @media screen and (max-width: 767px) {
   body {
     font-size: 14px;
@@ -243,9 +515,15 @@ textarea.form-input {
     line-height: 21px;
     letter-spacing: 0px;
   }
-  /* .hero-bg>img {
-        transform: scaleX(1.3) scaleY(1.2);
-    } */
+  #courseList .course-card .buttons-container {
+    flex-wrap: wrap; 
+  }
+}
+
+@media screen and (max-width: 576px) { /* Example: Extra small screens */
+  #courseList .course-card .buttons-container {
+    flex-wrap: wrap; /* Ensure wrapping is active */
+  }
 }
 
 ul {
@@ -373,8 +651,6 @@ footer {
   }
 }
 
-
-
 .card-line {
   position: relative;
 }
@@ -388,7 +664,6 @@ footer {
   position: relative;
   display: contents;
 }
-
 
 #description {
   font-size: medium;
@@ -418,9 +693,6 @@ footer {
     background-color: lightgray;
   }
 }
-
-
-
 
 .card-item-overflow {
   overflow: hidden;
@@ -453,8 +725,6 @@ footer {
 .typo-bg-green {
   color: #10293f;
 }
-
-
 
 .moreInfoButton {
   font-size: 17px;
@@ -764,7 +1034,6 @@ section.p-t {
     margin-bottom: 6px;
   }
 }
-
 
 .ball {
   display: flex;

@@ -18,130 +18,92 @@ function fetchHomeData() {
     .then((response) => response.items)
     .then((data) => {
       const list = document.querySelector("#courseList");
+      list.innerHTML = ""; // Clear existing content before adding new cards
       data.forEach((coursedata) => {
         const link = buildLink(coursedata.sys.id);
-
         let course = coursedata.fields;
 
-        const container = document.createElement("div");
-        container.classList.add("col-xl-4", "p-3", "position-relative");
+        const columnContainer = document.createElement("div");
+        columnContainer.classList.add("col-xl-4", "col-md-6", "mb-4");
 
-        const card = document.createElement("div");
-        card.classList.add("cards", "d-flex", "flex-column");
+        const courseCard = document.createElement("div");
+        courseCard.classList.add("course-card");
 
-        const titleBox = document.createElement("div");
-        titleBox.classList.add(
-          "card-line",
-          "text-center",
-          "fixed-height-title"
-        );
-        titleBox.setAttribute("id", "title");
+        const courseCardContent = document.createElement("div");
+        courseCardContent.classList.add("course-card-content");
+
+        const titleElement = document.createElement("h5");
+        titleElement.classList.add("course-card-title");
         const titleLink = document.createElement("a");
         titleLink.setAttribute("href", link);
+        titleLink.textContent =
+          course.shortTitle || "Kurstitel nicht verfügbar";
+        // Inline styles for text-decoration and color are now handled by CSS
+        titleElement.appendChild(titleLink);
 
-        const title = document.createElement("div");
-        title.classList.add("font-weight-bold", "fixed-height-content");
-        title.textContent = course.shortTitle;
+        const metaInfoElement = document.createElement("p");
+        metaInfoElement.classList.add("course-card-meta");
+        const kind = course.type || "Art nicht angegeben";
+        const date = course.date || "Termin nicht angegeben";
+        const onlineOrPresence = course.onlineOrPresence || "";
+        metaInfoElement.textContent = `${kind}${
+          onlineOrPresence ? `, ${onlineOrPresence}` : ""
+        }${date ? `, ${date}` : ""}`;
+        // Inline styles for meta info are now handled by CSS
 
-        if (title.textContent.length > 50) {
-          title.classList.add("h6");
-        } else {
-          title.classList.add("h5");
+        const descriptionElement = document.createElement("p");
+        descriptionElement.classList.add("course-card-description");
+        descriptionElement.textContent =
+          course.shortDescriptionOfContent || "Beschreibung nicht verfügbar.";
+
+        // --- MODIFIED BUTTONS SECTION ---
+        // This outer container helps with the mt-auto push
+        const buttonsOuterContainer = document.createElement("div");
+        buttonsOuterContainer.classList.add("mt-auto", "pt-3");
+
+        // This inner container is for the flex layout of buttons
+        const buttonsFlexContainer = document.createElement("div");
+        buttonsFlexContainer.classList.add("buttons-container"); // Class for CSS flex styling
+
+        // --- SWAPPED BUTTON ORDER ---
+        // Create "Anmeldungslink" button first if it exists
+        if (course.registration_link) {
+          const bookingButton = document.createElement("a");
+          // Add the new class 'course-card-booking-button'
+          bookingButton.classList.add(
+            "btn",
+            "course-card-button",
+            "course-card-booking-button"
+          );
+          bookingButton.href = course.registration_link;
+          bookingButton.target = "_blank";
+          bookingButton.rel = "noopener noreferrer";
+          bookingButton.textContent = "Anmeldungslink";
+          buttonsFlexContainer.appendChild(bookingButton); // Add to flex container
         }
 
-        titleLink.appendChild(title);
-        titleBox.appendChild(titleLink);
+        // Then create "Mehr Info" button if link exists
+        if (link) {
+          const infoButton = document.createElement("a");
+          infoButton.classList.add("btn", "course-card-button");
+          infoButton.href = link;
+          infoButton.textContent = "Mehr Info";
+          buttonsFlexContainer.appendChild(infoButton); // Add to flex container
+        }
+        // --- END OF SWAPPED BUTTON ORDER ---
 
-        const kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox =
-          document.createElement("div");
-        kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox.classList.add(
-          "card-line",
-          "fixed-height-subtitle"
-        );
-        const kindAndDateAndNumberOfDaysAndPresenceOrOnline =
-          document.createElement("div");
-        kindAndDateAndNumberOfDaysAndPresenceOrOnline.classList.add(
-          "typo-bg-green",
-          "fixed-height-content"
-        );
-        kindAndDateAndNumberOfDaysAndPresenceOrOnline.setAttribute(
-          "id",
-          "kindAndDateAndNumberOfDaysAndPresenceOrOnline"
-        );
+        buttonsOuterContainer.appendChild(buttonsFlexContainer); // Append flex container to outer container
+        // --- END OF MODIFIED BUTTONS SECTION ---
 
-        const kind = `${
-          !!course.type ? course.type : "Art ist nicht angegeben"
-        }`;
-        const date = `${
-          !!course.date ? course.date : "Termin ist nicht angegeben"
-        }`;
+        courseCardContent.appendChild(titleElement);
+        courseCardContent.appendChild(metaInfoElement);
+        courseCardContent.appendChild(descriptionElement);
+        courseCardContent.appendChild(buttonsOuterContainer); // Add the outer container for buttons
 
-        const onlineOrPresence = `${
-          !!course.onlineOrPresence ? course.onlineOrPresence : ""
-        }`;
+        courseCard.appendChild(courseCardContent);
+        columnContainer.appendChild(courseCard);
 
-        kindAndDateAndNumberOfDaysAndPresenceOrOnline.textContent = `${kind}, ${onlineOrPresence}, ${date}`;
-
-        kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox.appendChild(
-          kindAndDateAndNumberOfDaysAndPresenceOrOnline
-        );
-
-        const descriptionBox = document.createElement("div");
-        descriptionBox.classList.add(
-          "card-description",
-          "overflow-auto",
-          "fixed-height-description"
-        );
-        const description = document.createElement("div");
-        description.setAttribute("id", "description");
-        description.classList.add("typo-bg-green", "card-item-overflow");
-
-        description.textContent = `${
-          !!course.shortDescriptionOfContent
-            ? course.shortDescriptionOfContent
-            : "Beschreibung ist nicht angegeben"
-        }`;
-
-        descriptionBox.appendChild(description);
-
-        const buttonsContainer = document.createElement("div");
-        buttonsContainer.classList.add(
-          "mt-auto",
-          "d-flex",
-          "justify-content-center"
-        );
-
-        const bookingButtonBox = document.createElement("div");
-        bookingButtonBox.classList.add("px-2");
-        const bookingButton = document.createElement("button");
-        bookingButton.classList.add("button", "p-2");
-        bookingButton.textContent = "Anmeldungslink";
-        bookingButtonBox.appendChild(bookingButton);
-        bookingButton.setAttribute(
-          "onclick",
-          `window.open('${course.registration_link}', '_blank')`
-        );
-
-        const infoButtonBox = document.createElement("div");
-        infoButtonBox.classList.add("px-2");
-        const infoButton = document.createElement("button");
-        infoButton.classList.add("btn", "p-2");
-        infoButton.textContent = "Mehr Info"; // Updated text content
-        infoButtonBox.appendChild(infoButton);
-        infoButton.setAttribute(
-          "onclick",
-          `window.location.href='${link}'; return false;`
-        );
-
-        buttonsContainer.appendChild(bookingButtonBox);
-        buttonsContainer.appendChild(infoButtonBox);
-
-        card.appendChild(titleBox);
-        card.appendChild(kindAndDateAndNumberOfDaysAndPresenceOrOnlineBox);
-        card.appendChild(descriptionBox);
-        card.appendChild(buttonsContainer);
-        container.appendChild(card);
-        list.appendChild(container);
+        list.appendChild(columnContainer);
       });
     })
     .catch(console.error);
@@ -348,22 +310,6 @@ function parseRtf(rtf) {
   });
 
   return result.join("");
-}
-
-function groupByCourseType(data) {
-  const groupedCourses = {};
-
-  data.forEach((course) => {
-    const courseType = course.fields.courseType || "Unspecified";
-
-    if (!groupedCourses[courseType]) {
-      groupedCourses[courseType] = [];
-    }
-
-    groupedCourses[courseType].push(course);
-  });
-
-  return groupedCourses;
 }
 
 function fetchDescriptionData() {
